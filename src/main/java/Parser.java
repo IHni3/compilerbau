@@ -29,38 +29,128 @@ public class Parser
             throw new RuntimeException("Syntax error !");
         }
 
-
-
-
         position++;
     }
-/*
-    Start → '#' {Start.return = new OperandNode('#');}
-    Start → {RegExp.parameter = null;} ('RegExp')''#'
-    {
-        leaf = new OperandNode('#');
-        root = new BinOpNode('°', RegExp.return, leaf);
-        Start.return = root;
+
+    public Visitable run() {
+        return startState();
     }
-    RegExp → {Term.parameter = null;}
-    Term
-    {RE'.parameter = Term.return;}
-    RE'
-    {RegExp.return = RE'.return;}
-        RE' → Ɛ {RE'.return = RE'.parameter;}
-        RE' → '|'
-        {Term.parameter = null;}
-        Term
+
+    private Visitable startState() {
+        if(getCurrentChar() == '#') {
+            match('#');
+            return new OperandNode("#");
+        }
+        else if(getCurrentChar() == '(') {
+            match('(');
+
+            Visitable leafLeft = RegExpState();
+
+            match(')');
+
+            match('#');
+            OperandNode leafRight = new OperandNode("#");
+
+            return new BinOpNode("°", leafLeft, leafRight);
+        }
+        else
         {
-            root = new BinOpNode('|',
-                    RE'.parameter,
-            Term.return);
-            RE1'.parameter = root;
-        } RE1'
-        {RE'.return = RE1'.return;}
+            throw new RuntimeException("Syntax error !");
+        }
+    };
+    private Visitable RegExpState() {
+            Visitable termNode = TermState();
+            return RegExp1State(termNode);
+    };
+    private Visitable TermState() {
+        return TermState(null);
+    }
+    private Visitable TermState(Visitable node) {
+        //first
+        if(Character.isLetterOrDigit(getCurrentChar()) || getCurrentChar() == '(')
+        {
+            UnaryOpNode factorNode = FactorState();
+            Visitable termParamNode = null;
+            if(node != null)
+            {
+                termParamNode = new BinOpNode("°", node, factorNode);
+            }
+            else
+            {
+                termParamNode = factorNode;
+            }
+            return TermState(termParamNode);
+        }
+        else
+        {
+            return node;
+        }
+    };
+    private Visitable RegExp1State(Visitable node) {
+        if(getCurrentChar() == '|')
+        {
+            match('|');
+            Visitable termNode = TermState();
+            BinOpNode rootNode = new BinOpNode("|", node, termNode);
 
+            return RegExp1State(rootNode);
+        }
+        else {
+            return node;
+        }
+    };
+    private UnaryOpNode FactorState() {
+        Visitable node = ElemState();
+        return H0pState(node);
+    };
+    private UnaryOpNode H0pState(Visitable child) {
+        if(getCurrentChar() == '*') {
+            match('*');
+            return new UnaryOpNode("*", child);
+        }
+        else if(getCurrentChar() == '+') {
+            match('+');
+            return new UnaryOpNode("+", child);
 
-    */
+        }
+        else if(getCurrentChar() == '?') {
+            match('?');
+            return new UnaryOpNode("?", child);
+
+        }
+        else {
+            throw new RuntimeException("Syntax error !");
+        }
+    };
+    private Visitable ElemState() {
+        if(Character.isLetterOrDigit(getCurrentChar()))
+        {
+            OperandNode node = AlphaNumState();
+            return node;
+        }
+        else if(getCurrentChar() == '(') {
+            match('(');
+            Visitable node = RegExpState();
+            match(')');
+            return node;
+        }
+        else {
+            throw new RuntimeException("Syntax error !");
+        }
+    };
+    private OperandNode AlphaNumState() {
+        if(Character.isLetterOrDigit(getCurrentChar()))
+        {
+            OperandNode node = new OperandNode(String.valueOf(getCurrentChar()));
+            match(getCurrentChar());
+            return node;
+        }
+        else
+        {
+            throw new RuntimeException("Syntax error !");
+        }
+    };
+
 
 //------------------------------------------------------------------
 // 1. wird benoetigt bei der Regel Start -> '(' RegExp ')''#'
