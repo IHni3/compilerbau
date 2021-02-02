@@ -69,7 +69,7 @@ public class Parser
         //first
         if(Character.isLetterOrDigit(getCurrentChar()) || getCurrentChar() == '(')
         {
-            UnaryOpNode factorNode = FactorState();
+            Visitable factorNode = FactorState();
             Visitable termParamNode = null;
             if(node != null)
             {
@@ -99,11 +99,11 @@ public class Parser
             return node;
         }
     };
-    private UnaryOpNode FactorState() {
+    private Visitable FactorState() {
         Visitable node = ElemState();
         return H0pState(node);
     };
-    private UnaryOpNode H0pState(Visitable child) {
+    private Visitable H0pState(Visitable child) {
         if(getCurrentChar() == '*') {
             match('*');
             return new UnaryOpNode("*", child);
@@ -119,7 +119,7 @@ public class Parser
 
         }
         else {
-            throw new RuntimeException("Syntax error !");
+            return child;
         }
     };
     private Visitable ElemState() {
