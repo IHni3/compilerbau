@@ -36,7 +36,7 @@ public class ParserTest {
         else if(v instanceof OperandNode)
         {
             OperandNode node = (OperandNode) v;
-            System.out.printf("%s\n",node.symbol);
+            System.out.printf("%s\n",node.getSymbol());
         }
         else if(v instanceof  UnaryOpNode)
         {

@@ -28,4 +28,6 @@ public abstract class SyntaxNode
     public Set<Integer> getLastpos() {
         return lastpos;
     }
+
+
 }
