@@ -31,8 +31,6 @@ public class VisitorNFL implements Visitor {
             } else {
                 node.getLastpos().addAll(c2.getLastpos());
             }
-
-
         } else
 
         if (node.getOperator().equals("|")) {
