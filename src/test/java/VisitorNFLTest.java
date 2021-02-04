@@ -14,6 +14,7 @@ public class VisitorNFLTest {
         return testData.getTestCases().stream()
                 .map(testcase -> DynamicTest.dynamicTest("visiting: " + testcase.getInput(),
                         () -> {
+
                             var visitor = new VisitorNFL();
                             var actual = testcase.getParserExpected();
                             DepthFirstIterator.traverse(actual, visitor);

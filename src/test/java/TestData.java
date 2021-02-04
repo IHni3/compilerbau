@@ -7,6 +7,9 @@ public class TestData {
     private List<TestCase> cases;
 
     public TestData() {
+
+        cases = new ArrayList<TestCase>();
+
         cases.add(createTestCase01());
         cases.add(createTestCase02());
         cases.add(createTestCase03());

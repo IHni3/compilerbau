@@ -1,11 +1,11 @@
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 public class ParserTest {
@@ -16,7 +16,7 @@ public class ParserTest {
     }
 
     @TestFactory
-    Stream<DynamicTest> parserFactoryTest() {
+    public Stream<DynamicTest> parserFactoryTest() {
 
         var testData = new TestData();
 
@@ -29,6 +29,27 @@ public class ParserTest {
 
                             Assert.assertTrue(equals(actual,expected));
                         }));
+    }
+
+    @TestFactory
+    public Stream<DynamicTest> parserRuntimeExceptionTest() {
+
+        List<String> inputs = new ArrayList<String>(Arrays.asList("!", "##", "{}$$", "ABAB"));
+
+        return inputs.stream()
+                .map(input -> DynamicTest.dynamicTest("Parsing: " + input,
+                        () -> {
+                            var parser = new Parser(input);
+
+                            try {
+                                parser.run();
+                            } catch (RuntimeException ex) {
+                                return;
+                            }
+
+                            throw new RuntimeException("Parser should throw runtime exception");
+                        }));
+
     }
 
     private static boolean equals(Visitable v1, Visitable v2)

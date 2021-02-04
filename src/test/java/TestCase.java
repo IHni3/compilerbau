@@ -1,8 +1,8 @@
 public class TestCase {
-    private String input;
-    private Visitable parserExpected;
-    private Visitable visitorNFLExpected;
-    private Visitable visitorFollowposExpected;
+    private final String input;
+    private final Visitable parserExpected;
+    private final Visitable visitorNFLExpected;
+    private final Visitable visitorFollowposExpected;
 
     public TestCase(String input, Visitable parserExpected, Visitable visitorNFLExpected, Visitable visitorFollowposExpected) {
         this.input = input;
