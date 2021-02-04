@@ -1,12 +1,11 @@
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.stream.Stream;
 
 public class ParserTest {
 
@@ -16,57 +15,107 @@ public class ParserTest {
     }
 
     @TestFactory
-    public void parserTest(final String input, final Visitable expected) {
-        var parser = new Parser(input);
-        var visitable = parser.run();
-        Assert.assertTrue(equals(visitable,expected));
-    }
+    Stream<DynamicTest> parserFactoryTest() {
+        var inputList = new ArrayList<String>(Arrays.asList("#",
+                "(A)#",
+                "(A*)#",
+                "(A?)#",
+                "(A+)#",
+                "(AB)#",
+                "(A*B+)#",
+                "((AB)*)#",
+                "(A|B)#",
+                "(123)#"
+                ));
 
 
-    Stream<DynamicTest> dynamicTestsFromStreamInJava8() {
+        //#
+        var case01 = new OperandNode("#");
 
-        List<String> inputs = new ArrayList<String>(Arrays.asList("(A*|B?)#", "(A*|B?|(ABBC)*)#"));
+        //(A)#
+        var case02 = new BinOpNode("°",
+                new OperandNode("A"),
+                new OperandNode("#"));
+
+        //(A*)#
+        var case03 = new BinOpNode("°",
+                new UnaryOpNode("*", new OperandNode("A")),
+                new OperandNode("#"));
+
+        //(A?)#
+        var case04 = new BinOpNode("°",
+                new UnaryOpNode("?", new OperandNode("A")),
+                new OperandNode("#"));
+
+        //(A+)#
+        var case05 = new BinOpNode("°",
+                new UnaryOpNode("+", new OperandNode("A")),
+                new OperandNode("#"));
+
+        //(AB)#
+        var case06 = new BinOpNode("°",
+                new BinOpNode("°",
+                        new OperandNode("A"),
+                        new OperandNode("B")),
+                new OperandNode("#"));
+
+        //(A*B+)#
+        var case07 = new BinOpNode("°",
+                new BinOpNode("°",
+                        new UnaryOpNode("*",
+                                new OperandNode("A")),
+                        new UnaryOpNode("+",
+                                new OperandNode("B"))),
+                new OperandNode("#"));
+
+        //((AB)*)#
+        var case08 = new BinOpNode("°",
+                        new UnaryOpNode("*",
+                                new BinOpNode("°",
+                                    new OperandNode("A"),
+                                    new OperandNode("B"))),
+                    new OperandNode("#"));
+
+        //(A|B)#
+        var case09 = new BinOpNode("°",
+                new BinOpNode("|",
+                    new OperandNode("A"),
+                    new OperandNode("B")),
+                new OperandNode("#"));
+
+        //(123)#
+        var case10 = new BinOpNode("°",
+                new BinOpNode("°",
+                        new BinOpNode("°",
+                                new OperandNode("1"),
+                                new OperandNode("2")),
+                        new OperandNode("3")),
+                new OperandNode("#"));
+
+        var expectedList = new ArrayList<Visitable>(Arrays.asList(case01,
+                case02,
+                case03,
+                case04,
+                case05,
+                case06,
+                case07,
+                case08,
+                case09,
+                case10));
+
 
         return inputList.stream()
-                .map(dom -> DynamicTest.dynamicTest("Resolving: " + dom,
-                        () -> {int id = inputList.indexOf(dom);
+                .map(input -> DynamicTest.dynamicTest("Parsing: " + input,
+                        () -> {
+                            int id = inputList.indexOf(input);
 
-                            assertEquals(outputList.get(id), resolver.resolveDomain(dom));
+                            var parser = new Parser(input);
+                            var actual = parser.run();
+                            var expected = expectedList.get(id);
+
+                            Assert.assertTrue(equals(actual,expected));
                         }));
     }
-
-    @Test
-    public void simpleParserTest() {
-        Parser parser = new Parser("(A*|B?)#");
-        Visitable v = parser.run();
-        System.out.printf("\n\n");
-
-        Parser parser2 = new Parser("(A*|B?|(ABBC)*)#");
-
-        /*
-                °
-               / \
-              |   #
-             / \
-            /   \
-           |     \
-          / \     *
-         *   ?    |
-         |   |    °
-         A   B   / \
-                °   C
-               / \
-              °   B
-             / \
-            A   B
-         */
-        Visitable v2 = parser2.run();
-        System.out.printf("\n\n");
-
-        Parser parser3 = new Parser("(HALLO123)#");
-        Visitable v3 = parser.run();
-    }
-
 
     private static boolean equals(Visitable v1, Visitable v2)
     {
@@ -82,7 +131,7 @@ public class ParserTest {
         {
             OperandNode op1 = (OperandNode) v1;
             OperandNode op2 = (OperandNode) v2;
-            return op1.position == op2.position && op1.symbol.equals(op2.symbol);
+            return op1.getPosition() == op2.getPosition() && op1.getSymbol().equals(op2.getSymbol());
         }
         if (v1.getClass() == UnaryOpNode.class)
         {
