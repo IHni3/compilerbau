@@ -1,5 +1,4 @@
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -10,22 +9,123 @@ import java.util.stream.Stream;
 
 public class ParserTest {
 
-    @Before
-    public void init() {
+    public TestCase<String, Visitable> createTestCase01() {
+        //#
+        var parserExpected01 = new OperandNode("#");
+        return new TestCase<String,Visitable>("#",parserExpected01);
+    }
+    public TestCase<String, Visitable> createTestCase02() {
+        //(A)#
+        var parserExpected02 = new BinOpNode("°",
+                new OperandNode("A"),
+                new OperandNode("#"));
+        return new TestCase<String,Visitable>("(A)#",parserExpected02);
+    }
+    public TestCase<String, Visitable> createTestCase03() {
+        //(A*)#
+        var parserExpected03 = new BinOpNode("°",
+                new UnaryOpNode("*", new OperandNode("A")),
+                new OperandNode("#"));
+
+
+
+        return new TestCase<String,Visitable>("(A*)#",parserExpected03);
+    }
+    public TestCase<String, Visitable> createTestCase04() {
+        //(A?)#
+        var parserExpected04 = new BinOpNode("°",
+                new UnaryOpNode("?", new OperandNode("A")),
+                new OperandNode("#"));
+        return new TestCase<String,Visitable>("(A?)#",parserExpected04);
 
     }
+    public TestCase<String, Visitable> createTestCase05() {
+        //(A+)#
+        var parserExpected05 = new BinOpNode("°",
+                new UnaryOpNode("+", new OperandNode("A")),
+                new OperandNode("#"));
+        return new TestCase<String,Visitable>("(A+)#",parserExpected05);
+    }
+    public TestCase<String, Visitable> createTestCase06() {
+        //(AB)#
+        var parserExpected06 = new BinOpNode("°",
+                new BinOpNode("°",
+                        new OperandNode("A"),
+                        new OperandNode("B")),
+                new OperandNode("#"));
+        return new TestCase<String,Visitable>("(AB)#",parserExpected06);
+    }
+    public TestCase<String, Visitable> createTestCase07() {
+        //(A*B+)#
+        var parserExpected07 = new BinOpNode("°",
+                new BinOpNode("°",
+                        new UnaryOpNode("*",
+                                new OperandNode("A")),
+                        new UnaryOpNode("+",
+                                new OperandNode("B"))),
+                new OperandNode("#"));
+        return new TestCase<String,Visitable>("(A*B+)#",parserExpected07);
+    }
+    public TestCase<String, Visitable> createTestCase08() {
+        //((AB)*)#
+        var parserExpected08 = new BinOpNode("°",
+                new UnaryOpNode("*",
+                        new BinOpNode("°",
+                                new OperandNode("A"),
+                                new OperandNode("B"))),
+                new OperandNode("#"));
+        return new TestCase<String,Visitable>("((AB)*)#",parserExpected08);
+    }
+    public TestCase<String, Visitable> createTestCase09() {
+        //(A|B)#
+        var parserExpected09 = new BinOpNode("°",
+                new BinOpNode("|",
+                        new OperandNode("A"),
+                        new OperandNode("B")),
+                new OperandNode("#"));
+        return new TestCase<String,Visitable>("(A|B)#",parserExpected09);
+    }
+    public TestCase<String, Visitable> createTestCase10() {
+        //(123)#
+        var parserExpected10 = new BinOpNode("°",
+                new BinOpNode("°",
+                        new BinOpNode("°",
+                                new OperandNode("1"),
+                                new OperandNode("2")),
+                        new OperandNode("3")),
+                new OperandNode("#"));
+        return new TestCase<String,Visitable>("(123)#",parserExpected10);
+    }
+
+    public List<TestCase<String, Visitable>> createTestCases() {
+
+            var cases = new ArrayList<TestCase<String, Visitable>>();
+
+            cases.add(createTestCase01());
+            cases.add(createTestCase02());
+            cases.add(createTestCase03());
+            cases.add(createTestCase04());
+            cases.add(createTestCase05());
+            cases.add(createTestCase06());
+            cases.add(createTestCase07());
+            cases.add(createTestCase08());
+            cases.add(createTestCase09());
+            cases.add(createTestCase10());
+
+            return cases;
+        }
 
     @TestFactory
     public Stream<DynamicTest> parserFactoryTest() {
 
-        var testData = new TestData();
+        var testCases = createTestCases();
 
-        return testData.getTestCases().stream()
+        return testCases.stream()
                 .map(testcase -> DynamicTest.dynamicTest("Parsing: " + testcase.getInput(),
                         () -> {
                             var parser = new Parser(testcase.getInput());
                             var actual = parser.run();
-                            var expected = testcase.getParserExpected();
+                            var expected = testcase.getExpected();
 
                             Assert.assertTrue(equals(actual,expected));
                         }));

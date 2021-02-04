@@ -1,29 +1,16 @@
-public class TestCase {
-    private final String input;
-    private final Visitable parserExpected;
-    private final Visitable visitorNFLExpected;
-    private final Visitable visitorFollowposExpected;
+public class TestCase<InputType,ExpectedType>{
 
-    public TestCase(String input, Visitable parserExpected, Visitable visitorNFLExpected, Visitable visitorFollowposExpected) {
+    private final InputType input;
+    private final ExpectedType expected;
+
+    public TestCase(InputType input, ExpectedType expected) {
         this.input = input;
-        this.parserExpected = parserExpected;
-        this.visitorNFLExpected = visitorNFLExpected;
-        this.visitorFollowposExpected = visitorFollowposExpected;
+        this.expected = expected;
     }
-
-    public String getInput() {
+    public InputType getInput() {
         return input;
     }
-
-    public Visitable getParserExpected() {
-        return parserExpected;
-    }
-
-    public Visitable getVisitorNFLExpected() {
-        return visitorNFLExpected;
-    }
-
-    public Visitable getVisitorFollowposExpected() {
-        return visitorFollowposExpected;
+    public ExpectedType getExpected() {
+        return expected;
     }
 }
