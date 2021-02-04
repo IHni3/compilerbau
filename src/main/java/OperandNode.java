@@ -2,8 +2,24 @@
 
 public class OperandNode extends SyntaxNode implements Visitable
 {
-    public int position;
-    public String symbol;
+    public Integer getPosition() {
+        return position;
+    }
+
+    public void setPosition(Integer position) {
+        this.position = position;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
+    }
+
+    private Integer position;
+    private String symbol;
     public OperandNode(String symbol)
     {
         position = -1; // bedeutet: noch nicht initialisiert
