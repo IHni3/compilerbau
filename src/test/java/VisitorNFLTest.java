@@ -108,7 +108,7 @@ public class VisitorNFLTest {
     
     
     @TestFactory
-    public DynamicTest parserFactoryTest() {
+    public DynamicTest NFLFactoryTest() {
 
         var testCase = createTestCase();
 
