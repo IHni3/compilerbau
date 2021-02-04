@@ -3,7 +3,7 @@ import java.util.Set;
 
 class VisitorFollowpos implements Visitor {
         
-    private Set<FollowPosTableEntry> table = Collections.<FollowPosTableEntry>emptySet();
+    private final Set<FollowPosTableEntry> table = Collections.<FollowPosTableEntry>emptySet();
 
     public void visit(OperandNode node){
         table.add(new FollowPosTableEntry(node.getPosition(), node.getSymbol()));

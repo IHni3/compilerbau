@@ -2,8 +2,8 @@
 
 public class UnaryOpNode extends SyntaxNode implements Visitable
 {
-    private String operator;
-    private Visitable subNode;
+    private final String operator;
+    private final Visitable subNode;
 
     public UnaryOpNode(String operator, Visitable subNode)
     {

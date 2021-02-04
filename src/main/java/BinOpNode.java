@@ -1,9 +1,9 @@
 public class BinOpNode extends SyntaxNode implements Visitable
 {
 
-    private String operator;
-    private Visitable left;
-    private Visitable right;
+    private final String operator;
+    private final Visitable left;
+    private final Visitable right;
     public BinOpNode(String operator, Visitable left, Visitable
             right)
     {
