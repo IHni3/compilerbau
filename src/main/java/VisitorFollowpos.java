@@ -33,4 +33,8 @@ class VisitorFollowpos implements Visitor {
             }
         }
     }
+
+    public Set<FollowPosTableEntry> getTable(){
+        return table;
+    }
 }
