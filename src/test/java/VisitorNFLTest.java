@@ -96,7 +96,7 @@ public class VisitorNFLTest {
 
 
         var EXProotKon = new BinOpNode("°", orNode, zaunNode);
-        EXProotKon.setNullable(true);
+        EXProotKon.setNullable(false);
         EXProotKon.getFirstpos().add(1);
         EXProotKon.getFirstpos().add(2);
         EXProotKon.getFirstpos().add(3);
