@@ -37,71 +37,68 @@ public class VisitorNFLTest {
         var rootKon = new BinOpNode("°", orNode, zaunNode);
 
         var EXPaNode = new OperandNode("A");
-        EXPaNode.setPosition(1);
+        EXPaNode.setPosition(0);
         EXPaNode.setNullable(false);
-        EXPaNode.getFirstpos().add(1);
-        EXPaNode.getLastpos().add(1);
+        EXPaNode.getFirstpos().add(0);
+        EXPaNode.getLastpos().add(0);
         
         var EXPbNode = new OperandNode("B");
-        EXPbNode.setPosition(2);
+        EXPbNode.setPosition(1);
         EXPbNode.setNullable(false);
-        EXPbNode.getFirstpos().add(2);
-        EXPbNode.getLastpos().add(2);
+        EXPbNode.getFirstpos().add(1);
+        EXPbNode.getLastpos().add(1);
         
         var EXPcNode = new OperandNode("C");
-        EXPcNode.setPosition(3);
+        EXPcNode.setPosition(2);
         EXPcNode.setNullable(false);
-        EXPcNode.getFirstpos().add(3);
-        EXPcNode.getLastpos().add(3);
+        EXPcNode.getFirstpos().add(2);
+        EXPcNode.getLastpos().add(2);
         
         var EXPzaunNode = new OperandNode("#");
-        EXPzaunNode.setPosition(4);
+        EXPzaunNode.setPosition(3);
         EXPzaunNode.setNullable(false);
-        EXPzaunNode.getFirstpos().add(4);
-        EXPzaunNode.getLastpos().add(4);
+        EXPzaunNode.getFirstpos().add(3);
+        EXPzaunNode.getLastpos().add(3);
 
 
         var EXPposNode = new UnaryOpNode("+", aNode);
-        EXPposNode.setNullable(true);
-        EXPposNode.getFirstpos().add(1);
-        EXPposNode.getLastpos().add(1);
+        EXPposNode.setNullable(false);
+        EXPposNode.getFirstpos().add(0);
+        EXPposNode.getLastpos().add(0);
         
         var EXPfrageNode = new UnaryOpNode("?", bNode);
         EXPfrageNode.setNullable(true);
-        EXPfrageNode.getFirstpos().add(2);
-        EXPfrageNode.getLastpos().add(2);
+        EXPfrageNode.getFirstpos().add(1);
+        EXPfrageNode.getLastpos().add(1);
         
         var EXPklienNode = new UnaryOpNode("*", cNode);
         EXPklienNode.setNullable(true);
-        EXPklienNode.getFirstpos().add(3);
-        EXPklienNode.getLastpos().add(3);
+        EXPklienNode.getFirstpos().add(2);
+        EXPklienNode.getLastpos().add(2);
 
         var EXPinnerKon = new BinOpNode("°", posNode, frageNode);
-        EXPinnerKon.setNullable(true);
-        EXPinnerKon.getFirstpos().add(1);
-        EXPinnerKon.getFirstpos().add(2);
+        EXPinnerKon.setNullable(false);
+        EXPinnerKon.getFirstpos().add(0);
+        EXPinnerKon.getLastpos().add(0);
         EXPinnerKon.getLastpos().add(1);
-        EXPinnerKon.getLastpos().add(2);
 
 
         var EXPorNode = new BinOpNode("|", innerKon, klienNode);
         EXPorNode.setNullable(true);
-        EXPorNode.getFirstpos().add(1);
+        EXPorNode.getFirstpos().add(0);
         EXPorNode.getFirstpos().add(2);
-        EXPorNode.getFirstpos().add(3);
+        EXPorNode.getLastpos().add(0);
         EXPorNode.getLastpos().add(1);
         EXPorNode.getLastpos().add(2);
-        EXPorNode.getLastpos().add(3);
 
 
 
         var EXProotKon = new BinOpNode("°", orNode, zaunNode);
         EXProotKon.setNullable(false);
-        EXProotKon.getFirstpos().add(1);
+        EXProotKon.getFirstpos().add(0);
         EXProotKon.getFirstpos().add(2);
         EXProotKon.getFirstpos().add(3);
-        EXProotKon.getFirstpos().add(4);
-        EXProotKon.getLastpos().add(4);
+        EXProotKon.getLastpos().add(3);
 
         return new TestCase<Visitable, Visitable>(rootKon, EXProotKon);
     }
