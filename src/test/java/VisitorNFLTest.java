@@ -6,22 +6,105 @@ import java.util.stream.Stream;
 
 public class VisitorNFLTest {
 
+    private TestCase<Visitable, Visitable> createTestCase() {
+        var aNode = new OperandNode("A");
+        var bNode = new OperandNode("B");
+        var cNode = new OperandNode("C");
+        var zaunNode = new OperandNode("#");
+
+        var posNode = new UnaryOpNode("+", aNode);
+        var frageNode = new UnaryOpNode("?", bNode);
+        var klienNode = new UnaryOpNode("*", cNode);
+
+        var innerKon = new BinOpNode("°", posNode, frageNode);
+        var orNode = new BinOpNode("|", innerKon, klienNode);
+        var rootKon = new BinOpNode("°", orNode, zaunNode);
+
+        var EXPaNode = new OperandNode("A");
+        EXPaNode.setPosition(1);
+        EXPaNode.setNullable(false);
+        EXPaNode.getFirstpos().add(1);
+        EXPaNode.getLastpos().add(1);
+        
+        var EXPbNode = new OperandNode("B");
+        EXPbNode.setPosition(2);
+        EXPbNode.setNullable(false);
+        EXPbNode.getFirstpos().add(2);
+        EXPbNode.getLastpos().add(2);
+        
+        var EXPcNode = new OperandNode("C");
+        EXPcNode.setPosition(3);
+        EXPcNode.setNullable(false);
+        EXPcNode.getFirstpos().add(3);
+        EXPcNode.getLastpos().add(3);
+        
+        var EXPzaunNode = new OperandNode("#");
+        EXPzaunNode.setPosition(4);
+        EXPzaunNode.setNullable(false);
+        EXPzaunNode.getFirstpos().add(4);
+        EXPzaunNode.getLastpos().add(4);
+
+
+        var EXPposNode = new UnaryOpNode("+", aNode);
+        EXPposNode.setNullable(true);
+        EXPposNode.getFirstpos().add(1);
+        EXPposNode.getLastpos().add(1);
+        
+        var EXPfrageNode = new UnaryOpNode("?", bNode);
+        EXPfrageNode.setNullable(true);
+        EXPfrageNode.getFirstpos().add(2);
+        EXPfrageNode.getLastpos().add(2);
+        
+        var EXPklienNode = new UnaryOpNode("*", cNode);
+        EXPklienNode.setNullable(true);
+        EXPklienNode.getFirstpos().add(3);
+        EXPklienNode.getLastpos().add(3);
+
+        var EXPinnerKon = new BinOpNode("°", posNode, frageNode);
+        EXPinnerKon.setNullable(true);
+        EXPinnerKon.getFirstpos().add(1);
+        EXPinnerKon.getFirstpos().add(2);
+        EXPinnerKon.getLastpos().add(1);
+        EXPinnerKon.getLastpos().add(2);
+
+
+        var EXPorNode = new BinOpNode("|", innerKon, klienNode);
+        EXPorNode.setNullable(true);
+        EXPorNode.getFirstpos().add(1);
+        EXPorNode.getFirstpos().add(2);
+        EXPorNode.getFirstpos().add(3);
+        EXPorNode.getLastpos().add(1);
+        EXPorNode.getLastpos().add(2);
+        EXPorNode.getLastpos().add(3);
+
+
+
+        var EXProotKon = new BinOpNode("°", orNode, zaunNode);
+        EXProotKon.setNullable(true);
+        EXProotKon.getFirstpos().add(1);
+        EXProotKon.getFirstpos().add(2);
+        EXProotKon.getFirstpos().add(3);
+        EXProotKon.getFirstpos().add(4);
+        EXProotKon.getLastpos().add(4);
+
+        return new TestCase<Visitable, Visitable>(rootKon, EXProotKon);
+    }
+    
+    
     @TestFactory
-    Stream<DynamicTest> visitorFactoryTest() {
+    public DynamicTest parserFactoryTest() {
 
-        var testData = new TestData();
+        var testCase = createTestCase();
 
-        return testData.getTestCases().stream()
-                .map(testcase -> DynamicTest.dynamicTest("visiting: " + testcase.getInput(),
+        return DynamicTest.dynamicTest("Nullable Firstpos Lastpos Visitor überprüfen",
                         () -> {
-
                             var visitor = new VisitorNFL();
-                            var actual = testcase.getParserExpected();
-                            DepthFirstIterator.traverse(actual, visitor);
-                            var expected = testcase.getVisitorNFLExpected();
+                            DepthFirstIterator.traverse(testCase.getInput(), visitor);
+                            var actual = testCase.getInput();
+                            var expected = testCase.getExpected();
 
                             Assert.assertTrue(equals(actual,expected));
-                        }));
+                        });
     }
 
 
