@@ -5,6 +5,9 @@ import org.junit.jupiter.api.TestFactory;
 import java.util.stream.Stream;
 
 /*
+
+Verwendeter Baum:
+
                 °
                / \
               /   #
