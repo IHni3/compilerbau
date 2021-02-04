@@ -20,7 +20,10 @@ class VisitorFollowpos implements Visitor {
                     }
                 }
             }
-        } else if (node.getOperator().equals("*") || node.getOperator().equals("?")){
+        } 
+    }
+    public void visit(UnaryOpNode node){
+        if (node.getOperator().equals("*") || node.getOperator().equals("?")){
             for (Integer pos : node.getLastpos()) {
                 for (FollowPosTableEntry tableEntry : table){
                     if (tableEntry.getPosition() == pos){
@@ -29,8 +32,5 @@ class VisitorFollowpos implements Visitor {
                 }
             }
         }
-    }
-    public void visit(UnaryOpNode node){
-        
     }
 }
