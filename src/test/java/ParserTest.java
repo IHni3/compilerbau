@@ -1,5 +1,6 @@
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -16,102 +17,15 @@ public class ParserTest {
 
     @TestFactory
     Stream<DynamicTest> parserFactoryTest() {
-        var inputList = new ArrayList<String>(Arrays.asList("#",
-                "(A)#",
-                "(A*)#",
-                "(A?)#",
-                "(A+)#",
-                "(AB)#",
-                "(A*B+)#",
-                "((AB)*)#",
-                "(A|B)#",
-                "(123)#"
-                ));
 
+        var testData = new TestData();
 
-        //#
-        var case01 = new OperandNode("#");
-
-        //(A)#
-        var case02 = new BinOpNode("°",
-                new OperandNode("A"),
-                new OperandNode("#"));
-
-        //(A*)#
-        var case03 = new BinOpNode("°",
-                new UnaryOpNode("*", new OperandNode("A")),
-                new OperandNode("#"));
-
-        //(A?)#
-        var case04 = new BinOpNode("°",
-                new UnaryOpNode("?", new OperandNode("A")),
-                new OperandNode("#"));
-
-        //(A+)#
-        var case05 = new BinOpNode("°",
-                new UnaryOpNode("+", new OperandNode("A")),
-                new OperandNode("#"));
-
-        //(AB)#
-        var case06 = new BinOpNode("°",
-                new BinOpNode("°",
-                        new OperandNode("A"),
-                        new OperandNode("B")),
-                new OperandNode("#"));
-
-        //(A*B+)#
-        var case07 = new BinOpNode("°",
-                new BinOpNode("°",
-                        new UnaryOpNode("*",
-                                new OperandNode("A")),
-                        new UnaryOpNode("+",
-                                new OperandNode("B"))),
-                new OperandNode("#"));
-
-        //((AB)*)#
-        var case08 = new BinOpNode("°",
-                        new UnaryOpNode("*",
-                                new BinOpNode("°",
-                                    new OperandNode("A"),
-                                    new OperandNode("B"))),
-                    new OperandNode("#"));
-
-        //(A|B)#
-        var case09 = new BinOpNode("°",
-                new BinOpNode("|",
-                    new OperandNode("A"),
-                    new OperandNode("B")),
-                new OperandNode("#"));
-
-        //(123)#
-        var case10 = new BinOpNode("°",
-                new BinOpNode("°",
-                        new BinOpNode("°",
-                                new OperandNode("1"),
-                                new OperandNode("2")),
-                        new OperandNode("3")),
-                new OperandNode("#"));
-
-        var expectedList = new ArrayList<Visitable>(Arrays.asList(case01,
-                case02,
-                case03,
-                case04,
-                case05,
-                case06,
-                case07,
-                case08,
-                case09,
-                case10));
-
-
-        return inputList.stream()
-                .map(input -> DynamicTest.dynamicTest("Parsing: " + input,
+        return testData.getTestCases().stream()
+                .map(testcase -> DynamicTest.dynamicTest("Parsing: " + testcase.getInput(),
                         () -> {
-                            int id = inputList.indexOf(input);
-
-                            var parser = new Parser(input);
+                            var parser = new Parser(testcase.getInput());
                             var actual = parser.run();
-                            var expected = expectedList.get(id);
+                            var expected = testcase.getParserExpected();
 
                             Assert.assertTrue(equals(actual,expected));
                         }));
