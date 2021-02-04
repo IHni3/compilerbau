@@ -9,8 +9,8 @@ public abstract class SyntaxNode
 
     public SyntaxNode()
     {
-        firstpos = new HashSet<Integer>();
-        lastpos = new HashSet<Integer>();
+        firstpos = new HashSet<>();
+        lastpos = new HashSet<>();
     }
 
     public Boolean getNullable() {

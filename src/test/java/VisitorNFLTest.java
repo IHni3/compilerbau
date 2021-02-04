@@ -4,6 +4,19 @@ import org.junit.jupiter.api.TestFactory;
 
 import java.util.stream.Stream;
 
+/*
+                °
+               / \
+              /   #
+             |
+            / \
+           °   \
+          / \   *
+         +   ?  |
+         |   |  C
+         A   B
+ */
+
 public class VisitorNFLTest {
 
     private TestCase<Visitable, Visitable> createTestCase() {

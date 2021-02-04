@@ -3,7 +3,7 @@ public class Parser
     private int position;
     private final String input;
 //...
-    public Parser(String input)
+    public Parser(final String input)
     {
         this.input = input;
         this.position = 0;
@@ -13,8 +13,12 @@ public class Parser
     {
         return input.charAt(position);
     }
-//...
-    private void match(char symbol)
+    public String getInput()
+    {
+        return input;
+    }
+
+    private void match(final char symbol)
     {
         if ((input == null) || ("".equals(input)))
         {
@@ -47,7 +51,7 @@ public class Parser
         else if(getCurrentChar() == '(') {
             match('(');
 
-            Visitable leafLeft = RegExpState();
+            Visitable leafLeft = regExpState();
 
             match(')');
 
@@ -63,18 +67,18 @@ public class Parser
             throw new RuntimeException("Syntax error !");
         }
     };
-    private Visitable RegExpState() {
-            Visitable termNode = TermState();
-            return RegExp1State(termNode);
+    private Visitable regExpState() {
+            Visitable termNode = termState();
+            return regExp1State(termNode);
     };
-    private Visitable TermState() {
-        return TermState(null);
+    private Visitable termState() {
+        return termState(null);
     }
-    private Visitable TermState(Visitable node) {
+    private Visitable termState(Visitable node) {
         //first
         if(Character.isLetterOrDigit(getCurrentChar()) || getCurrentChar() == '(')
         {
-            Visitable factorNode = FactorState();
+            Visitable factorNode = factorState();
             Visitable termParamNode = null;
             if(node != null)
             {
@@ -84,31 +88,31 @@ public class Parser
             {
                 termParamNode = factorNode;
             }
-            return TermState(termParamNode);
+            return termState(termParamNode);
         }
         else
         {
             return node;
         }
     };
-    private Visitable RegExp1State(Visitable node) {
+    private Visitable regExp1State(Visitable node) {
         if(getCurrentChar() == '|')
         {
             match('|');
-            Visitable termNode = TermState();
+            Visitable termNode = termState();
             BinOpNode rootNode = new BinOpNode("|", node, termNode);
 
-            return RegExp1State(rootNode);
+            return regExp1State(rootNode);
         }
         else {
             return node;
         }
     };
-    private Visitable FactorState() {
-        Visitable node = ElemState();
-        return H0pState(node);
+    private Visitable factorState() {
+        Visitable node = elemState();
+        return h0pState(node);
     };
-    private Visitable H0pState(Visitable child) {
+    private Visitable h0pState(Visitable child) {
         if(getCurrentChar() == '*') {
             match('*');
             return new UnaryOpNode("*", child);
@@ -127,15 +131,15 @@ public class Parser
             return child;
         }
     };
-    private Visitable ElemState() {
+    private Visitable elemState() {
         if(Character.isLetterOrDigit(getCurrentChar()))
         {
-            OperandNode node = AlphaNumState();
+            OperandNode node = alphaNumState();
             return node;
         }
         else if(getCurrentChar() == '(') {
             match('(');
-            Visitable node = RegExpState();
+            Visitable node = regExpState();
             match(')');
             return node;
         }
@@ -143,7 +147,7 @@ public class Parser
             throw new RuntimeException("Syntax error !");
         }
     };
-    private OperandNode AlphaNumState() {
+    private OperandNode alphaNumState() {
         if(Character.isLetterOrDigit(getCurrentChar()))
         {
             OperandNode node = new OperandNode(String.valueOf(getCurrentChar()));
@@ -170,3 +174,4 @@ public class Parser
         }
     }
 }
+
