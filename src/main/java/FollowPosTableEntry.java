@@ -34,7 +34,7 @@ class FollowPosTableEntry {
             return false;
         }
         FollowPosTableEntry other = (FollowPosTableEntry) obj;
-        return this.position == other.position &&
+        return this.position.equals(other.position) &&
                 this.symbol.equals(other.symbol) &&
                 this.followpos.equals(other.followpos);
     }
