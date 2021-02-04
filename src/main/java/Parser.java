@@ -39,6 +39,9 @@ public class Parser
     private Visitable startState() {
         if(getCurrentChar() == '#') {
             match('#');
+            
+            assertEndOfInput();
+
             return new OperandNode("#");
         }
         else if(getCurrentChar() == '(') {
@@ -50,6 +53,8 @@ public class Parser
 
             match('#');
             OperandNode leafRight = new OperandNode("#");
+
+            assertEndOfInput();
 
             return new BinOpNode("°", leafLeft, leafRight);
         }
