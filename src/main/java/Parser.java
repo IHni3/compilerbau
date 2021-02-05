@@ -1,8 +1,10 @@
+// Class for the Parser to divide the input into each char.
+
 public class Parser
 {
     private int position;
     private final String input;
-//...
+
     public Parser(final String input)
     {
         this.input = input;
@@ -18,6 +20,7 @@ public class Parser
         return input;
     }
 
+    // Checks the expression for the exit Token.
     private void match(final char symbol)
     {
         if ((input == null) || ("".equals(input)))
@@ -40,6 +43,7 @@ public class Parser
         return startState();
     }
 
+    // Checks for the exit token and if brackets are closed.
     private Visitable startState() {
         if(getCurrentChar() == '#') {
             match('#');
@@ -162,9 +166,9 @@ public class Parser
 
 
 //------------------------------------------------------------------
-// 1. wird benoetigt bei der Regel Start -> '(' RegExp ')''#'
-// 2. wird benoetigt bei der Regel Start -> '#'
-// 3. wird sonst bei keiner anderen Regel benoetigt
+// 1. is required for the Start rule -> '(' RegExp ')''#'
+// 2. is required for the Start rule -> '#'
+// 3. is otherwise not required for any other rule
 //------------------------------------------------------------------
     private void assertEndOfInput()
     {

@@ -1,10 +1,12 @@
 
+// Class for Unary Operation Nodes (+, * and ?).
 
 public class UnaryOpNode extends SyntaxNode implements Visitable
 {
     private final String operator;
     private final Visitable subNode;
 
+    // Sets one visitable child Node.
     public UnaryOpNode(String operator, Visitable subNode)
     {
         this.operator = operator;
