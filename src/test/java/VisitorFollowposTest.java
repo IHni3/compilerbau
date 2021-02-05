@@ -5,10 +5,7 @@ import org.junit.jupiter.api.TestFactory;
 
 import javax.swing.*;
 import java.security.InvalidParameterException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class VisitorFollowposTest {
@@ -31,10 +28,10 @@ public class VisitorFollowposTest {
         ---------------------------
         |Pos |Symbol  | Followpos |
         ---------------------------
-        |1   |A       |1, 2       |
-        |2   |B       |1, 2       |
-        |3   |C       |4          |
-        |4   |#       |{}         |
+        |0   |A       |0, 1       |
+        |1   |B       |1          |
+        |2   |C       |2          |
+        |3   |#       |{}         |
         ---------------------------
 
         */
@@ -75,36 +72,24 @@ public class VisitorFollowposTest {
         var orNode = new BinOpNode("|", innerKon, klienNode);
         var rootKon = new BinOpNode("°", orNode, zaunNode);
 
-        var EXPaNode = new OperandNode("A");
-        EXPaNode.setPosition(1);
-        EXPaNode.getFollowpos().add(1);
-        EXPaNode.getFollowpos().add(2);
-        addNodeToTable(EXPaNode, table);
 
-        var EXPbNode = new OperandNode("B");
-        EXPbNode.setPosition(2);
-        EXPbNode.getFollowpos().add(1);
-        EXPbNode.getFollowpos().add(2);
-        addNodeToTable(EXPbNode, table);
 
-        var EXPcNode = new OperandNode("C");
-        EXPcNode.setPosition(3);
-        EXPcNode.getFollowpos().add(4);
-        addNodeToTable(EXPcNode, table);
+        var tableEntry1 = tableEntryFactory(0, "A", new Integer[]{0, 1, 3});
 
-        var EXPzaunNode = new OperandNode("#");
-        EXPzaunNode.setPosition(4);
-        addNodeToTable(EXPzaunNode, table);
+        var tableEntry2 =tableEntryFactory(1, "B", new Integer [] {3});
 
+        var tableEntry3 = tableEntryFactory(2, "C", new Integer[] {2, 3});
+
+        var tableEntry4 = tableEntryFactory(3, "#", new Integer[] {});
 
         return new TestCase<Visitable, Set<FollowPosTableEntry>>(rootKon, table);
     }
 
-    private void addNodeToTable (OperandNode node, Collection<FollowPosTableEntry> table) {
-        table.add(new FollowPosTableEntry(node.getPosition(), node.getSymbol()));
+    public FollowPosTableEntry tableEntryFactory(Integer pos, String operand, Integer[] followpos)
+    {
+        var tableEntry = new FollowPosTableEntry(pos, operand);
 
-        for (FollowPosTableEntry tableEntry : table) {
-            tableEntry.getFollowpos().addAll(node.getFollowpos());
-        }
+            tableEntry.getFollowpos().addAll(Arrays.asList(followpos));
+            return  tableEntry;
     }
 }
