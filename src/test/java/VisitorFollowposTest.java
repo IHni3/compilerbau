@@ -1,14 +1,11 @@
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-import javax.swing.*;
-import java.security.InvalidParameterException;
+import jdk.nashorn.api.tree.Tree;
+
 import java.util.*;
-import java.util.stream.Stream;
 import java.util.List;
-import java.util.Set;
 import java.util.ArrayList;
 
 public class VisitorFollowposTest {
@@ -58,9 +55,9 @@ public class VisitorFollowposTest {
                     });
         }
 
-    private TestCase<Visitable, List<FollowPosTableEntry>> createTestCase() {
+    private TestCase<Visitable, TreeMap<Integer, FollowPosTableEntry>> createTestCase() {
 
-        List<FollowPosTableEntry> table = new ArrayList<FollowPosTableEntry>();
+        TreeMap<Integer, FollowPosTableEntry> table = new TreeMap<Integer, FollowPosTableEntry>();
 
         var aNode = new OperandNode("A");
         aNode.setPosition(0);
@@ -134,12 +131,12 @@ public class VisitorFollowposTest {
 
         var tableEntry4 = tableEntryFactory(3, "#", new Integer[] {});
 
-        table.add(tableEntry1);
-        table.add(tableEntry2);
-        table.add(tableEntry3);
-        table.add(tableEntry4);
+        table.put(0, tableEntry1);
+        table.put(1, tableEntry2);
+        table.put(2, tableEntry3);
+        table.put(3, tableEntry4);
 
-        return new TestCase<Visitable, List<FollowPosTableEntry>>(rootKon, table);
+        return new TestCase<Visitable, TreeMap<Integer, FollowPosTableEntry>>(rootKon, table);
     }
 
     public FollowPosTableEntry tableEntryFactory(Integer pos, String operand, Integer[] followpos)
