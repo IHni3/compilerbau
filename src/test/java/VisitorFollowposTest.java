@@ -47,11 +47,14 @@ public class VisitorFollowposTest {
             return DynamicTest.dynamicTest("test followpos visitor",
                     () -> {
                         var visitor = new VisitorFollowpos();
-                        DepthFirstIterator.traverse(testCase.getInput(), visitor);
-                        var actual = testCase.getInput();
+
+                        var tree = testCase.getInput();
+                        DepthFirstIterator.traverse(tree, visitor);
+
+                        var actual = visitor.getTable();
                         var expected = testCase.getExpected();
 
-                        Assert.assertEquals((Set<FollowPosTableEntry>) actual,expected);
+                        Assert.assertEquals(actual,expected);
                     });
         }
 
