@@ -4,21 +4,14 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 import javax.swing.*;
+import java.security.InvalidParameterException;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
 public class VisitorFollowposTest {
-
-
-        private Set<FollowPosTableEntry> table;
-
-        @Before
-        public void init()
-        {
-            table =  Collections.<FollowPosTableEntry>emptySet();
-        }
 
         /*
         Used Tree:
@@ -58,11 +51,14 @@ public class VisitorFollowposTest {
                         var actual = testCase.getInput();
                         var expected = testCase.getExpected();
 
-                        Assert.assertTrue(equals((Set<FollowPosTableEntry>) actual,expected));
+                        Assert.assertEquals((Set<FollowPosTableEntry>) actual,expected);
                     });
         }
 
     private TestCase<Visitable, Set<FollowPosTableEntry>> createTestCase() {
+
+        var table =  Collections.<FollowPosTableEntry>emptySet();
+
         var aNode = new OperandNode("A");
         var bNode = new OperandNode("B");
         var cNode = new OperandNode("C");
@@ -80,41 +76,32 @@ public class VisitorFollowposTest {
         EXPaNode.setPosition(1);
         EXPaNode.getFollowpos().add(1);
         EXPaNode.getFollowpos().add(2);
-        addTable(EXPaNode);
+        addNodeToTable(EXPaNode, table);
 
         var EXPbNode = new OperandNode("B");
         EXPbNode.setPosition(2);
         EXPbNode.getFollowpos().add(1);
         EXPbNode.getFollowpos().add(2);
-        addTable(EXPbNode);
+        addNodeToTable(EXPbNode, table);
 
         var EXPcNode = new OperandNode("C");
         EXPcNode.setPosition(3);
         EXPcNode.getFollowpos().add(4);
-        addTable(EXPcNode);
+        addNodeToTable(EXPcNode, table);
 
         var EXPzaunNode = new OperandNode("#");
         EXPzaunNode.setPosition(4);
-        addTable(EXPzaunNode);
+        addNodeToTable(EXPzaunNode, table);
 
 
         return new TestCase<Visitable, Set<FollowPosTableEntry>>(rootKon, table);
     }
 
-    private void addTable (OperandNode node) {
+    private void addNodeToTable (OperandNode node, Collection<FollowPosTableEntry> table) {
         table.add(new FollowPosTableEntry(node.getPosition(), node.getSymbol()));
+
         for (FollowPosTableEntry tableEntry : table) {
             tableEntry.getFollowpos().addAll(node.getFollowpos());
         }
-    }
-
-    private boolean equals(Set<FollowPosTableEntry> expected, Set<FollowPosTableEntry> visited)
-    {
-        if (expected == null && visited == null) return true;
-        if (expected == null || visited == null) return false;
-        if (expected.getClass() != visited.getClass()) return false;
-
-
-        throw new IllegalStateException("invalid followpos!");
     }
 }
