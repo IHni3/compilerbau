@@ -2,11 +2,8 @@ import org.junit.Assert;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-import jdk.nashorn.api.tree.Tree;
-
 import java.util.*;
-import java.util.List;
-import java.util.ArrayList;
+
 
 public class VisitorFollowposTest {
 
@@ -36,114 +33,56 @@ public class VisitorFollowposTest {
 
         */
 
-        @TestFactory
-        public DynamicTest followposFactoryTest() {
+    @TestFactory
+    public DynamicTest followposFactoryTest() {
 
-            var testCase = createTestCase();
+        var testCase = createTestCase();
 
-            return DynamicTest.dynamicTest("test followpos visitor",
-                    () -> {
-                        var visitor = new VisitorFollowpos();
+        return DynamicTest.dynamicTest("test followpos visitor",
+                () -> {
+                    var visitor = new VisitorFollowpos();
 
-                        var tree = testCase.getInput();
-                        DepthFirstIterator.traverse(tree, visitor);
+                    var tree = testCase.getInput();
+                    DepthFirstIterator.traverse(tree, visitor);
 
-                        var actual = visitor.getTable();
-                        var expected = testCase.getExpected();
+                    var actual = visitor.getTable();
+                    var expected = testCase.getExpected();
 
-                        Assert.assertEquals(actual,expected);
-                    });
-        }
+                    Assert.assertEquals(actual,expected);
+                });
+    }
 
-    private TestCase<Visitable, TreeMap<Integer, FollowPosTableEntry>> createTestCase() {
+    private static TestCase<Visitable, TreeMap<Integer, FollowPosTableEntry>> createTestCase() {
 
-        TreeMap<Integer, FollowPosTableEntry> table = new TreeMap<Integer, FollowPosTableEntry>();
+        var aOperandNode    = Utils.operandNodeFactory("A", 0, false, 0,0);
+        var bOperandNode    = Utils.operandNodeFactory("B", 1, false, 1, 1);
+        var cOperandNode    = Utils.operandNodeFactory("C", 2, false, 2 ,2);
+        var endNode         = Utils.operandNodeFactory("#", 3, false, 3,3);
 
-        var aNode = new OperandNode("A");
-        aNode.setPosition(0);
-        aNode.setNullable(false);
-        aNode.getFirstpos().add(0);
-        aNode.getLastpos().add(0);
-        
-        var bNode = new OperandNode("B");
-        bNode.setPosition(1);
-        bNode.setNullable(false);
-        bNode.getFirstpos().add(1);
-        bNode.getLastpos().add(1);
-        
-        var cNode = new OperandNode("C");
-        cNode.setPosition(2);
-        cNode.setNullable(false);
-        cNode.getFirstpos().add(2);
-        cNode.getLastpos().add(2);
-        
-        var zaunNode = new OperandNode("#");
-        zaunNode.setPosition(3);
-        zaunNode.setNullable(false);
-        zaunNode.getFirstpos().add(3);
-        zaunNode.getLastpos().add(3);
+        var plusNode        = Utils.unaryNodeFactory("+", aOperandNode, false, 0, 0);
+        var questionNode    = Utils.unaryNodeFactory("?", bOperandNode, true, 1, 1);
+        var starNode        = Utils.unaryNodeFactory("*", cOperandNode, true, 2, 2);
+
+        var andNode = Utils.binOpNodeFactory("°", plusNode, questionNode, false, new Integer[]{0}, new Integer[]{0,1});
+        var orNode = Utils.binOpNodeFactory("|", andNode, starNode, true, new Integer[]{0,2}, new Integer[]{0,1,2});
 
 
-        var posNode = new UnaryOpNode("+", aNode);
-        posNode.setNullable(false);
-        posNode.getFirstpos().add(0);
-        posNode.getLastpos().add(0);
-        
-        var frageNode = new UnaryOpNode("?", bNode);
-        frageNode.setNullable(true);
-        frageNode.getFirstpos().add(1);
-        frageNode.getLastpos().add(1);
-        
-        var klienNode = new UnaryOpNode("*", cNode);
-        klienNode.setNullable(true);
-        klienNode.getFirstpos().add(2);
-        klienNode.getLastpos().add(2);
+        var rootNode = Utils.binOpNodeFactory("°", orNode, endNode, false, new Integer[]{0,2,3}, new Integer[]{3});
 
-        var innerKon = new BinOpNode("°", posNode, frageNode);
-        innerKon.setNullable(false);
-        innerKon.getFirstpos().add(0);
-        innerKon.getLastpos().add(0);
-        innerKon.getLastpos().add(1);
+        var tableEntry1 = Utils.tableEntryFactory(0, "A", new Integer[] {0, 1, 3});
+        var tableEntry2 = Utils.tableEntryFactory(1, "B", new Integer[] {3});
+        var tableEntry3 = Utils.tableEntryFactory(2, "C", new Integer[] {2, 3});
+        var tableEntry4 = Utils.tableEntryFactory(3, "#", new Integer[] {});
 
-
-        var orNode = new BinOpNode("|", innerKon, klienNode);
-        orNode.setNullable(true);
-        orNode.getFirstpos().add(0);
-        orNode.getFirstpos().add(2);
-        orNode.getLastpos().add(0);
-        orNode.getLastpos().add(1);
-        orNode.getLastpos().add(2);
-
-
-
-        var rootKon = new BinOpNode("°", orNode, zaunNode);
-        rootKon.setNullable(false);
-        rootKon.getFirstpos().add(0);
-        rootKon.getFirstpos().add(2);
-        rootKon.getFirstpos().add(3);
-        rootKon.getLastpos().add(3);
-
-        var tableEntry1 = tableEntryFactory(0, "A", new Integer[]{0, 1, 3});
-
-        var tableEntry2 =tableEntryFactory(1, "B", new Integer [] {3});
-
-        var tableEntry3 = tableEntryFactory(2, "C", new Integer[] {2, 3});
-
-        var tableEntry4 = tableEntryFactory(3, "#", new Integer[] {});
+        var table = new TreeMap<Integer, FollowPosTableEntry>();
 
         table.put(0, tableEntry1);
         table.put(1, tableEntry2);
         table.put(2, tableEntry3);
         table.put(3, tableEntry4);
 
-        return new TestCase<Visitable, TreeMap<Integer, FollowPosTableEntry>>(rootKon, table);
+        return new TestCase<>(rootNode, table);
     }
 
-    public FollowPosTableEntry tableEntryFactory(Integer pos, String operand, Integer[] followpos)
-    {
-        var tableEntry = new FollowPosTableEntry(pos, operand);
 
-            tableEntry.getFollowpos().addAll(Arrays.asList(followpos));
-            return  tableEntry;
-    }
 }

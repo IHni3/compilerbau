@@ -4,85 +4,93 @@ import org.junit.jupiter.api.TestFactory;
 
 public class VisitorNFLTest {
 
-    private TestCase<Visitable, Visitable> createTestCase() {
-        var aNode = new OperandNode("A");
-        var bNode = new OperandNode("B");
-        var cNode = new OperandNode("C");
-        var zaunNode = new OperandNode("#");
+    private static Visitable createInput() {
+        var aOperandNode = new OperandNode("A");
+        var bOperandNode = new OperandNode("B");
+        var cOperandNode = new OperandNode("C");
+        var endNode = new OperandNode("#");
 
-        var posNode = new UnaryOpNode("+", aNode);
-        var frageNode = new UnaryOpNode("?", bNode);
-        var klienNode = new UnaryOpNode("*", cNode);
+        var plusNode = new UnaryOpNode("+", aOperandNode);
+        var questionNode = new UnaryOpNode("?", bOperandNode);
+        var starNode = new UnaryOpNode("*", cOperandNode);
 
-        var innerKon = new BinOpNode("°", posNode, frageNode);
-        var orNode = new BinOpNode("|", innerKon, klienNode);
-        var rootKon = new BinOpNode("°", orNode, zaunNode);
+        var andNode = new BinOpNode("°", plusNode, questionNode);
+        var orNode = new BinOpNode("|", andNode, starNode);
+        var rootNode = new BinOpNode("°", orNode, endNode);
 
-        var EXPaNode = new OperandNode("A");
-        EXPaNode.setPosition(0);
-        EXPaNode.setNullable(false);
-        EXPaNode.getFirstpos().add(0);
-        EXPaNode.getLastpos().add(0);
-        
-        var EXPbNode = new OperandNode("B");
-        EXPbNode.setPosition(1);
-        EXPbNode.setNullable(false);
-        EXPbNode.getFirstpos().add(1);
-        EXPbNode.getLastpos().add(1);
-        
-        var EXPcNode = new OperandNode("C");
-        EXPcNode.setPosition(2);
-        EXPcNode.setNullable(false);
-        EXPcNode.getFirstpos().add(2);
-        EXPcNode.getLastpos().add(2);
-        
-        var EXPzaunNode = new OperandNode("#");
-        EXPzaunNode.setPosition(3);
-        EXPzaunNode.setNullable(false);
-        EXPzaunNode.getFirstpos().add(3);
-        EXPzaunNode.getLastpos().add(3);
+        return rootNode;
+    }
 
+    private static Visitable createExpected() {
+        var aOperandNode = new OperandNode("A");
+        aOperandNode.setPosition(0);
+        aOperandNode.setNullable(false);
+        aOperandNode.getFirstpos().add(0);
+        aOperandNode.getLastpos().add(0);
 
-        var EXPposNode = new UnaryOpNode("+", aNode);
-        EXPposNode.setNullable(false);
-        EXPposNode.getFirstpos().add(0);
-        EXPposNode.getLastpos().add(0);
-        
-        var EXPfrageNode = new UnaryOpNode("?", bNode);
-        EXPfrageNode.setNullable(true);
-        EXPfrageNode.getFirstpos().add(1);
-        EXPfrageNode.getLastpos().add(1);
-        
-        var EXPklienNode = new UnaryOpNode("*", cNode);
-        EXPklienNode.setNullable(true);
-        EXPklienNode.getFirstpos().add(2);
-        EXPklienNode.getLastpos().add(2);
+        var bOperandNode = new OperandNode("B");
+        bOperandNode.setPosition(1);
+        bOperandNode.setNullable(false);
+        bOperandNode.getFirstpos().add(1);
+        bOperandNode.getLastpos().add(1);
 
-        var EXPinnerKon = new BinOpNode("°", posNode, frageNode);
-        EXPinnerKon.setNullable(false);
-        EXPinnerKon.getFirstpos().add(0);
-        EXPinnerKon.getLastpos().add(0);
-        EXPinnerKon.getLastpos().add(1);
+        var cOperandNode = new OperandNode("C");
+        cOperandNode.setPosition(2);
+        cOperandNode.setNullable(false);
+        cOperandNode.getFirstpos().add(2);
+        cOperandNode.getLastpos().add(2);
+
+        var endNode = new OperandNode("#");
+        endNode.setPosition(3);
+        endNode.setNullable(false);
+        endNode.getFirstpos().add(3);
+        endNode.getLastpos().add(3);
 
 
-        var EXPorNode = new BinOpNode("|", innerKon, klienNode);
-        EXPorNode.setNullable(true);
-        EXPorNode.getFirstpos().add(0);
-        EXPorNode.getFirstpos().add(2);
-        EXPorNode.getLastpos().add(0);
-        EXPorNode.getLastpos().add(1);
-        EXPorNode.getLastpos().add(2);
+        var plusNode = new UnaryOpNode("+", aOperandNode);
+        plusNode.setNullable(false);
+        plusNode.getFirstpos().add(0);
+        plusNode.getLastpos().add(0);
+
+        var questionNode = new UnaryOpNode("?", bOperandNode);
+        questionNode.setNullable(true);
+        questionNode.getFirstpos().add(1);
+        questionNode.getLastpos().add(1);
+
+        var starNode = new UnaryOpNode("*", cOperandNode);
+        starNode.setNullable(true);
+        starNode.getFirstpos().add(2);
+        starNode.getLastpos().add(2);
+
+        var andNode = new BinOpNode("°", plusNode, questionNode);
+        andNode.setNullable(false);
+        andNode.getFirstpos().add(0);
+        andNode.getLastpos().add(0);
+        andNode.getLastpos().add(1);
+
+
+        var orNode = new BinOpNode("|", andNode, starNode);
+        orNode.setNullable(true);
+        orNode.getFirstpos().add(0);
+        orNode.getFirstpos().add(2);
+        orNode.getLastpos().add(0);
+        orNode.getLastpos().add(1);
+        orNode.getLastpos().add(2);
 
 
 
-        var EXProotKon = new BinOpNode("°", orNode, zaunNode);
-        EXProotKon.setNullable(false);
-        EXProotKon.getFirstpos().add(0);
-        EXProotKon.getFirstpos().add(2);
-        EXProotKon.getFirstpos().add(3);
-        EXProotKon.getLastpos().add(3);
+        var rootNode = new BinOpNode("°", orNode, endNode);
+        rootNode.setNullable(false);
+        rootNode.getFirstpos().add(0);
+        rootNode.getFirstpos().add(2);
+        rootNode.getFirstpos().add(3);
+        rootNode.getLastpos().add(3);
 
-        return new TestCase<Visitable, Visitable>(rootKon, EXProotKon);
+        return rootNode;
+    }
+
+    private static TestCase<Visitable, Visitable> createTestCase() {
+        return new TestCase<>(createInput(), createExpected());
     }
     
     

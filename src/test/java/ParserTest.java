@@ -9,19 +9,19 @@ import java.util.stream.Stream;
 
 public class ParserTest {
 
-    public TestCase<String, Visitable> createTestCase01() {
+    private static TestCase<String, Visitable> createTestCase01() {
         //#
         var parserExpected01 = new OperandNode("#");
         return new TestCase<String,Visitable>("#",parserExpected01);
     }
-    public TestCase<String, Visitable> createTestCase02() {
+    private static TestCase<String, Visitable> createTestCase02() {
         //(A)#
         var parserExpected02 = new BinOpNode("°",
                 new OperandNode("A"),
                 new OperandNode("#"));
         return new TestCase<String,Visitable>("(A)#",parserExpected02);
     }
-    public TestCase<String, Visitable> createTestCase03() {
+    private static TestCase<String, Visitable> createTestCase03() {
         //(A*)#
         var parserExpected03 = new BinOpNode("°",
                 new UnaryOpNode("*", new OperandNode("A")),
@@ -31,7 +31,7 @@ public class ParserTest {
 
         return new TestCase<String,Visitable>("(A*)#",parserExpected03);
     }
-    public TestCase<String, Visitable> createTestCase04() {
+    private static TestCase<String, Visitable> createTestCase04() {
         //(A?)#
         var parserExpected04 = new BinOpNode("°",
                 new UnaryOpNode("?", new OperandNode("A")),
@@ -39,14 +39,14 @@ public class ParserTest {
         return new TestCase<String,Visitable>("(A?)#",parserExpected04);
 
     }
-    public TestCase<String, Visitable> createTestCase05() {
+    private static TestCase<String, Visitable> createTestCase05() {
         //(A+)#
         var parserExpected05 = new BinOpNode("°",
                 new UnaryOpNode("+", new OperandNode("A")),
                 new OperandNode("#"));
         return new TestCase<String,Visitable>("(A+)#",parserExpected05);
     }
-    public TestCase<String, Visitable> createTestCase06() {
+    private static TestCase<String, Visitable> createTestCase06() {
         //(AB)#
         var parserExpected06 = new BinOpNode("°",
                 new BinOpNode("°",
@@ -55,7 +55,7 @@ public class ParserTest {
                 new OperandNode("#"));
         return new TestCase<String,Visitable>("(AB)#",parserExpected06);
     }
-    public TestCase<String, Visitable> createTestCase07() {
+    private static TestCase<String, Visitable> createTestCase07() {
         //(A*B+)#
         var parserExpected07 = new BinOpNode("°",
                 new BinOpNode("°",
@@ -66,7 +66,7 @@ public class ParserTest {
                 new OperandNode("#"));
         return new TestCase<String,Visitable>("(A*B+)#",parserExpected07);
     }
-    public TestCase<String, Visitable> createTestCase08() {
+    private static TestCase<String, Visitable> createTestCase08() {
         //((AB)*)#
         var parserExpected08 = new BinOpNode("°",
                 new UnaryOpNode("*",
@@ -76,7 +76,7 @@ public class ParserTest {
                 new OperandNode("#"));
         return new TestCase<String,Visitable>("((AB)*)#",parserExpected08);
     }
-    public TestCase<String, Visitable> createTestCase09() {
+    private static TestCase<String, Visitable> createTestCase09() {
         //(A|B)#
         var parserExpected09 = new BinOpNode("°",
                 new BinOpNode("|",
@@ -85,7 +85,7 @@ public class ParserTest {
                 new OperandNode("#"));
         return new TestCase<String,Visitable>("(A|B)#",parserExpected09);
     }
-    public TestCase<String, Visitable> createTestCase10() {
+    private static TestCase<String, Visitable> createTestCase10() {
         //(123)#
         var parserExpected10 = new BinOpNode("°",
                 new BinOpNode("°",
@@ -97,22 +97,20 @@ public class ParserTest {
         return new TestCase<String,Visitable>("(123)#",parserExpected10);
     }
 
-    public List<TestCase<String, Visitable>> createTestCases() {
+    private static List<TestCase<String, Visitable>> createTestCases() {
 
-            var cases = new ArrayList<TestCase<String, Visitable>>();
-
-            cases.add(createTestCase01());
-            cases.add(createTestCase02());
-            cases.add(createTestCase03());
-            cases.add(createTestCase04());
-            cases.add(createTestCase05());
-            cases.add(createTestCase06());
-            cases.add(createTestCase07());
-            cases.add(createTestCase08());
-            cases.add(createTestCase09());
-            cases.add(createTestCase10());
-
-            return cases;
+            return new ArrayList<>(Arrays.asList(
+                    createTestCase01(),
+                    createTestCase02(),
+                    createTestCase03(),
+                    createTestCase04(),
+                    createTestCase05(),
+                    createTestCase06(),
+                    createTestCase07(),
+                    createTestCase08(),
+                    createTestCase09(),
+                    createTestCase10()
+            ));
         }
 
     @TestFactory
@@ -147,7 +145,7 @@ public class ParserTest {
                                 return;
                             }
 
-                            throw new RuntimeException("Parser should throw runtime exception !");
+                            throw new RuntimeException("Parser did not throw runtime exception!");
                         }));
 
     }
@@ -183,7 +181,7 @@ public class ParserTest {
                     equals(op1.getLeft(), op2.getLeft()) &&
                     equals(op1.getRight(), op2.getRight());
         }
-        throw new IllegalStateException("Invalid node type !");
+        throw new IllegalStateException("Invalid node type!");
     }
 
 
