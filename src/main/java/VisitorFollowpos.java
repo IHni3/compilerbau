@@ -1,13 +1,15 @@
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.ArrayList;
 
 class VisitorFollowpos implements Visitor {
 
-    private Set<FollowPosTableEntry> table;
+    private List<FollowPosTableEntry> table;
     
     public VisitorFollowpos(){
-        table = new HashSet<FollowPosTableEntry>();
+        table = new ArrayList<FollowPosTableEntry>();
     }
 
     public void visit(OperandNode node){
@@ -39,7 +41,7 @@ class VisitorFollowpos implements Visitor {
         }
     }
 
-    public Set<FollowPosTableEntry> getTable(){
+    public List<FollowPosTableEntry> getTable(){
         return table;
     }
 }
