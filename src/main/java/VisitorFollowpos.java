@@ -5,13 +5,9 @@ class VisitorFollowpos implements Visitor {
 
     private Set<FollowPosTableEntry> table;
     
-    public void Visitor(){
+    public void VisitorFollowpos(){
         table = Collections.<FollowPosTableEntry>emptySet();
     }
-        
-     
-
-
 
     public void visit(OperandNode node){
         table.add(new FollowPosTableEntry(node.getPosition(), node.getSymbol()));
