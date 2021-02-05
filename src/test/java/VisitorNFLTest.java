@@ -94,8 +94,11 @@ public class VisitorNFLTest {
         return DynamicTest.dynamicTest("Test nullable firstpos lastpos visitor",
                         () -> {
                             var visitor = new VisitorNFL();
-                            DepthFirstIterator.traverse(testCase.getInput(), visitor);
-                            var actual = testCase.getInput();
+
+                            var tree = testCase.getInput();
+                            DepthFirstIterator.traverse(tree, visitor);
+
+                            var actual = tree;
                             var expected = testCase.getExpected();
 
                             Assert.assertTrue(equals(actual,expected));
