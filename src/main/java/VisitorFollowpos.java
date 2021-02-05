@@ -2,8 +2,16 @@ import java.util.Collections;
 import java.util.Set;
 
 class VisitorFollowpos implements Visitor {
+
+    private Set<FollowPosTableEntry> table;
+    
+    public void Visitor(){
+        table = Collections.<FollowPosTableEntry>emptySet();
+    }
         
-    private final Set<FollowPosTableEntry> table = Collections.<FollowPosTableEntry>emptySet();
+     
+
+
 
     public void visit(OperandNode node){
         table.add(new FollowPosTableEntry(node.getPosition(), node.getSymbol()));
@@ -15,7 +23,7 @@ class VisitorFollowpos implements Visitor {
         if (node.getOperator().equals("°")){
             for (Integer pos : c1.getLastpos()) {
                 for (FollowPosTableEntry tableEntry : table){
-                    if (tableEntry.getPosition() == pos){
+                    if (tableEntry.getPosition().equals(pos)){
                         tableEntry.getFollowpos().addAll(c2.getFirstpos());
                     }
                 }
@@ -26,7 +34,7 @@ class VisitorFollowpos implements Visitor {
         if (node.getOperator().equals("*") || node.getOperator().equals("+")){
             for (Integer pos : node.getLastpos()) {
                 for (FollowPosTableEntry tableEntry : table){
-                    if (tableEntry.getPosition() == pos){
+                    if (tableEntry.getPosition().equals(pos)){
                         tableEntry.getFollowpos().addAll(node.getFirstpos());
                     }
                 }
