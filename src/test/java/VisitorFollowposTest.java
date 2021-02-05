@@ -1,4 +1,5 @@
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -11,44 +12,46 @@ import java.util.stream.Stream;
 public class VisitorFollowposTest {
 
 
-        private final Set<FollowPosTableEntry> table = Collections.<FollowPosTableEntry>emptySet();
+        private Set<FollowPosTableEntry> table;
+
+        @Before
+        public void init()
+        {
+            table =  Collections.<FollowPosTableEntry>emptySet();
+        }
 
         /*
+        Used Tree:
 
-Verwendeter Baum:
+                        °
+                       / \
+                      /   #
+                     |
+                    / \
+                   °   \
+                  / \   *
+                 +   ?  |
+                 |   |  C
+                 A   B
 
-                °
-               / \
-              /   #
-             |
-            / \
-           °   \
-          / \   *
-         +   ?  |
-         |   |  C
-         A   B
+        Excepted Table
+        ---------------------------
+        |Pos |Symbol  | Followpos |
+        ---------------------------
+        |1   |A       |1, 2       |
+        |2   |B       |1, 2       |
+        |3   |C       |4          |
+        |4   |#       |{}         |
+        ---------------------------
 
-Verwendete Tabelle
----------------------------
-|Pos |Zeichen | Followpos |
----------------------------
-|1   |A       |1, 2       |
-|2   |B       |1, 2       |
-|3   |C       |4          |
-|4   |#       |{}         |
----------------------------
-
- */
-
-
-
+        */
 
         @TestFactory
-        public DynamicTest FollowposFactoryTest() {
+        public DynamicTest followposFactoryTest() {
 
             var testCase = createTestCase();
 
-            return DynamicTest.dynamicTest("Followpos Visitor überprüfen",
+            return DynamicTest.dynamicTest("test followpos visitor",
                     () -> {
                         var visitor = new VisitorFollowpos();
                         DepthFirstIterator.traverse(testCase.getInput(), visitor);
@@ -112,6 +115,6 @@ Verwendete Tabelle
         if (expected.getClass() != visited.getClass()) return false;
 
 
-        throw new IllegalStateException("Ungueltige Followpos!");
+        throw new IllegalStateException("invalid followpos!");
     }
 }

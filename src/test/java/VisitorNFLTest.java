@@ -2,24 +2,6 @@ import org.junit.Assert;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-import java.util.stream.Stream;
-
-/*
-
-Verwendeter Baum:
-
-                °
-               / \
-              /   #
-             |
-            / \
-           °   \
-          / \   *
-         +   ?  |
-         |   |  C
-         A   B
- */
-
 public class VisitorNFLTest {
 
     private TestCase<Visitable, Visitable> createTestCase() {
@@ -109,7 +91,7 @@ public class VisitorNFLTest {
 
         var testCase = createTestCase();
 
-        return DynamicTest.dynamicTest("Nullable Firstpos Lastpos Visitor überprüfen",
+        return DynamicTest.dynamicTest("Test nullable firstpos lastpos visitor",
                         () -> {
                             var visitor = new VisitorNFL();
                             DepthFirstIterator.traverse(testCase.getInput(), visitor);

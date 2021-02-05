@@ -132,7 +132,7 @@ public class ParserTest {
     }
 
     @TestFactory
-    public Stream<DynamicTest> parserRuntimeExceptionTest() {
+    public Stream<DynamicTest> parserInvalidInputTest() {
 
         List<String> inputs = new ArrayList<String>(Arrays.asList("!", "##", "{}$$", "ABAB"));
 
@@ -147,7 +147,7 @@ public class ParserTest {
                                 return;
                             }
 
-                            throw new RuntimeException("Parser should throw runtime exception");
+                            throw new RuntimeException("Parser should throw runtime exception !");
                         }));
 
     }
@@ -183,7 +183,7 @@ public class ParserTest {
                     equals(op1.getLeft(), op2.getLeft()) &&
                     equals(op1.getRight(), op2.getRight());
         }
-        throw new IllegalStateException("Ungueltiger Knotentyp!");
+        throw new IllegalStateException("Invalid node type !");
     }
 
 

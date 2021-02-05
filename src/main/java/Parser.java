@@ -22,15 +22,15 @@ public class Parser
     {
         if ((input == null) || ("".equals(input)))
         {
-            throw new RuntimeException("Syntax error !");
+            throw new RuntimeException("Syntax error!");
         }
         if (position >= input.length())
         {
-            throw new RuntimeException("End of input reached !");
+            throw new RuntimeException("End of input reached!");
         }
         if (getCurrentChar() != symbol)
         {
-            throw new RuntimeException("Syntax error !");
+            throw new RuntimeException("Syntax error!");
         }
 
         position++;
@@ -170,7 +170,7 @@ public class Parser
     {
         if (position < input.length())
         {
-            throw new RuntimeException(" No end of input reached !");
+            throw new RuntimeException(" No end of input reached!");
         }
     }
 }
