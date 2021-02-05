@@ -57,22 +57,71 @@ public class VisitorFollowposTest {
 
     private TestCase<Visitable, Set<FollowPosTableEntry>> createTestCase() {
 
-        var table =  Collections.<FollowPosTableEntry>emptySet();
+        HashSet<FollowPosTableEntry> table = new HashSet<FollowPosTableEntry>();
 
         var aNode = new OperandNode("A");
+        aNode.setPosition(0);
+        aNode.setNullable(false);
+        aNode.getFirstpos().add(0);
+        aNode.getLastpos().add(0);
+        
         var bNode = new OperandNode("B");
+        bNode.setPosition(1);
+        bNode.setNullable(false);
+        bNode.getFirstpos().add(1);
+        bNode.getLastpos().add(1);
+        
         var cNode = new OperandNode("C");
+        cNode.setPosition(2);
+        cNode.setNullable(false);
+        cNode.getFirstpos().add(2);
+        cNode.getLastpos().add(2);
+        
         var zaunNode = new OperandNode("#");
+        zaunNode.setPosition(3);
+        zaunNode.setNullable(false);
+        zaunNode.getFirstpos().add(3);
+        zaunNode.getLastpos().add(3);
+
 
         var posNode = new UnaryOpNode("+", aNode);
+        posNode.setNullable(false);
+        posNode.getFirstpos().add(0);
+        posNode.getLastpos().add(0);
+        
         var frageNode = new UnaryOpNode("?", bNode);
+        frageNode.setNullable(true);
+        frageNode.getFirstpos().add(1);
+        frageNode.getLastpos().add(1);
+        
         var klienNode = new UnaryOpNode("*", cNode);
+        klienNode.setNullable(true);
+        klienNode.getFirstpos().add(2);
+        klienNode.getLastpos().add(2);
 
         var innerKon = new BinOpNode("°", posNode, frageNode);
+        innerKon.setNullable(false);
+        innerKon.getFirstpos().add(0);
+        innerKon.getLastpos().add(0);
+        innerKon.getLastpos().add(1);
+
+
         var orNode = new BinOpNode("|", innerKon, klienNode);
+        orNode.setNullable(true);
+        orNode.getFirstpos().add(0);
+        orNode.getFirstpos().add(2);
+        orNode.getLastpos().add(0);
+        orNode.getLastpos().add(1);
+        orNode.getLastpos().add(2);
+
+
+
         var rootKon = new BinOpNode("°", orNode, zaunNode);
-
-
+        rootKon.setNullable(false);
+        rootKon.getFirstpos().add(0);
+        rootKon.getFirstpos().add(2);
+        rootKon.getFirstpos().add(3);
+        rootKon.getLastpos().add(3);
 
         var tableEntry1 = tableEntryFactory(0, "A", new Integer[]{0, 1, 3});
 
@@ -81,6 +130,11 @@ public class VisitorFollowposTest {
         var tableEntry3 = tableEntryFactory(2, "C", new Integer[] {2, 3});
 
         var tableEntry4 = tableEntryFactory(3, "#", new Integer[] {});
+
+        table.add(tableEntry1);
+        table.add(tableEntry2);
+        table.add(tableEntry3);
+        table.add(tableEntry4);
 
         return new TestCase<Visitable, Set<FollowPosTableEntry>>(rootKon, table);
     }
