@@ -7,6 +7,9 @@ import javax.swing.*;
 import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.stream.Stream;
+import java.util.List;
+import java.util.Set;
+import java.util.ArrayList;
 
 public class VisitorFollowposTest {
 
@@ -55,9 +58,9 @@ public class VisitorFollowposTest {
                     });
         }
 
-    private TestCase<Visitable, Set<FollowPosTableEntry>> createTestCase() {
+    private TestCase<Visitable, List<FollowPosTableEntry>> createTestCase() {
 
-        HashSet<FollowPosTableEntry> table = new HashSet<FollowPosTableEntry>();
+        List<FollowPosTableEntry> table = new ArrayList<FollowPosTableEntry>();
 
         var aNode = new OperandNode("A");
         aNode.setPosition(0);
@@ -136,7 +139,7 @@ public class VisitorFollowposTest {
         table.add(tableEntry3);
         table.add(tableEntry4);
 
-        return new TestCase<Visitable, Set<FollowPosTableEntry>>(rootKon, table);
+        return new TestCase<Visitable, List<FollowPosTableEntry>>(rootKon, table);
     }
 
     public FollowPosTableEntry tableEntryFactory(Integer pos, String operand, Integer[] followpos)
