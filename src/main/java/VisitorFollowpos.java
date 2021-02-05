@@ -1,13 +1,12 @@
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 class VisitorFollowpos implements Visitor {
 
     private Set<FollowPosTableEntry> table;
     
-    public VisitorFollowpos(){
-        table = new HashSet<FollowPosTableEntry>();
+    public void VisitorFollowpos(){
+        table = Collections.<FollowPosTableEntry>emptySet();
     }
 
     public void visit(OperandNode node){
