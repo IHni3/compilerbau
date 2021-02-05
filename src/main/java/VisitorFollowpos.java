@@ -2,18 +2,19 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.ArrayList;
 
 class VisitorFollowpos implements Visitor {
 
-    private List<FollowPosTableEntry> table;
+    private TreeMap<Integer, FollowPosTableEntry> table;
     
     public VisitorFollowpos(){
-        table = new ArrayList<FollowPosTableEntry>();
+        table = new TreeMap<Integer, FollowPosTableEntry>();
     }
 
     public void visit(OperandNode node){
-        table.add(new FollowPosTableEntry(node.getPosition(), node.getSymbol()));
+        table.put(node.getPosition(), new FollowPosTableEntry(node.getPosition(), node.getSymbol()));
     }
     public void visit(BinOpNode node){
         SyntaxNode c1 = (SyntaxNode)node.getLeft();
@@ -21,27 +22,19 @@ class VisitorFollowpos implements Visitor {
         
         if (node.getOperator().equals("°")){
             for (Integer pos : c1.getLastpos()) {
-                for (FollowPosTableEntry tableEntry : table){
-                    if (tableEntry.getPosition().equals(pos)){
-                        tableEntry.getFollowpos().addAll(c2.getFirstpos());
-                    }
-                }
+                table.get(pos).getFollowpos().addAll(c2.getFirstpos());
             }
         } 
     }
     public void visit(UnaryOpNode node){
         if (node.getOperator().equals("*") || node.getOperator().equals("+")){
             for (Integer pos : node.getLastpos()) {
-                for (FollowPosTableEntry tableEntry : table){
-                    if (tableEntry.getPosition().equals(pos)){
-                        tableEntry.getFollowpos().addAll(node.getFirstpos());
-                    }
-                }
+                table.get(pos).getFollowpos().addAll(node.getFirstpos());
             }
         }
     }
 
-    public List<FollowPosTableEntry> getTable(){
+    public TreeMap<Integer, FollowPosTableEntry> getTable(){
         return table;
     }
 }
