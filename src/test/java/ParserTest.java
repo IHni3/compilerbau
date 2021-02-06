@@ -143,15 +143,17 @@ public class ParserTest {
     @TestFactory
     public Stream<DynamicTest> parserInvalidInputTest() {
 
-        List<String> inputs = new ArrayList<String>(Arrays.asList("!", "##", "{}$$", "ABAB"));
+        List<String> inputs = new ArrayList<String>(Arrays.asList("!", "##", "{}$$", "ABAB", "(A**)#", "(AB)#5"));
 
         return inputs.stream()
                 .map(input -> DynamicTest.dynamicTest("Parsing: " + input,
                         () -> {
                             var parser = new Parser(input);
 
+                            Visitable v;
+
                             try {
-                                parser.run();
+                                v = parser.run();
                             } catch (RuntimeException ex) {
                                 return;
                             }
