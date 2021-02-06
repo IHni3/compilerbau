@@ -64,7 +64,7 @@ public class VisitorFollowposTest {
         var starNode        = Utils.unaryNodeFactory("*", cOperandNode, true, 2, 2);
 
         var andNode = Utils.binOpNodeFactory("°", plusNode, questionNode, false, new Integer[]{0}, new Integer[]{0,1});
-        var orNode = Utils.binOpNodeFactory("|", andNode, starNode, true, new Integer[]{0,2}, new Integer[]{0,1,2});
+        var orNode  = Utils.binOpNodeFactory("|", andNode, starNode, true, new Integer[]{0,2}, new Integer[]{0,1,2});
 
 
         var rootNode = Utils.binOpNodeFactory("°", orNode, endNode, false, new Integer[]{0,2,3}, new Integer[]{3});

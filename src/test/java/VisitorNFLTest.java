@@ -22,69 +22,20 @@ public class VisitorNFLTest {
     }
 
     private static Visitable createExpected() {
-        var aOperandNode = new OperandNode("A");
-        aOperandNode.setPosition(0);
-        aOperandNode.setNullable(false);
-        aOperandNode.getFirstpos().add(0);
-        aOperandNode.getLastpos().add(0);
+        var aOperandNode    = Utils.operandNodeFactory("A", 0, false, 0,0);
+        var bOperandNode    = Utils.operandNodeFactory("B", 1, false, 1,1);
+        var cOperandNode    = Utils.operandNodeFactory("C", 2, false, 2,2);
 
-        var bOperandNode = new OperandNode("B");
-        bOperandNode.setPosition(1);
-        bOperandNode.setNullable(false);
-        bOperandNode.getFirstpos().add(1);
-        bOperandNode.getLastpos().add(1);
+        var endNode     = Utils.operandNodeFactory("#", 3, false, 3, 3);
 
-        var cOperandNode = new OperandNode("C");
-        cOperandNode.setPosition(2);
-        cOperandNode.setNullable(false);
-        cOperandNode.getFirstpos().add(2);
-        cOperandNode.getLastpos().add(2);
+        var plusNode    = Utils.unaryNodeFactory("#", aOperandNode, false, 0, 0);
+        var questionNode= Utils.unaryNodeFactory("?", bOperandNode, true, 1, 1);
+        var starNode    = Utils.unaryNodeFactory("*", cOperandNode, true, 2, 2);
 
-        var endNode = new OperandNode("#");
-        endNode.setPosition(3);
-        endNode.setNullable(false);
-        endNode.getFirstpos().add(3);
-        endNode.getLastpos().add(3);
+        var andNode     = Utils.binOpNodeFactory("°", plusNode, questionNode, false, new Integer[]{0}, new Integer[]{0,1});
+        var orNode      = Utils.binOpNodeFactory("|", andNode, starNode, true, new Integer[]{0,2}, new Integer[]{0,1,2});
 
-
-        var plusNode = new UnaryOpNode("+", aOperandNode);
-        plusNode.setNullable(false);
-        plusNode.getFirstpos().add(0);
-        plusNode.getLastpos().add(0);
-
-        var questionNode = new UnaryOpNode("?", bOperandNode);
-        questionNode.setNullable(true);
-        questionNode.getFirstpos().add(1);
-        questionNode.getLastpos().add(1);
-
-        var starNode = new UnaryOpNode("*", cOperandNode);
-        starNode.setNullable(true);
-        starNode.getFirstpos().add(2);
-        starNode.getLastpos().add(2);
-
-        var andNode = new BinOpNode("°", plusNode, questionNode);
-        andNode.setNullable(false);
-        andNode.getFirstpos().add(0);
-        andNode.getLastpos().add(0);
-        andNode.getLastpos().add(1);
-
-
-        var orNode = new BinOpNode("|", andNode, starNode);
-        orNode.setNullable(true);
-        orNode.getFirstpos().add(0);
-        orNode.getFirstpos().add(2);
-        orNode.getLastpos().add(0);
-        orNode.getLastpos().add(1);
-        orNode.getLastpos().add(2);
-
-
-
-        var rootNode = new BinOpNode("°", orNode, endNode);
-        rootNode.setNullable(false);
-        rootNode.getFirstpos().add(0);
-        rootNode.getFirstpos().add(2);
-        rootNode.getFirstpos().add(3);
-        rootNode.getLastpos().add(3);
+        var rootNode = Utils.binOpNodeFactory("°", orNode, endNode, false, new Integer[]{0,2,3}, new Integer[]{3});
 
         return rootNode;
     }
@@ -92,7 +43,6 @@ public class VisitorNFLTest {
     private static TestCase<Visitable, Visitable> createTestCase() {
         return new TestCase<>(createInput(), createExpected());
     }
-    
     
     @TestFactory
     public DynamicTest NFLFactoryTest() {
