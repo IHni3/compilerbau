@@ -1,7 +1,11 @@
+// Class to traverse the tree.
+
 class DepthFirstIterator
 {
     public static void traverse(Visitable root, Visitor visitor)
     {
+        // traverses through the nodes and child nodes recursively
+        // till it reaches an OperandNode.
         if (root instanceof OperandNode)
         {
             root.accept(visitor);

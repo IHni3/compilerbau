@@ -8,7 +8,7 @@ import java.util.*;
 public class VisitorFollowposTest {
 
         /*
-        Used Tree:
+        Used tree for the test:
 
                         °
                        / \
@@ -21,7 +21,7 @@ public class VisitorFollowposTest {
                  |   |  C
                  A   B
 
-        Excepted Table
+        Excepted Followpos table:
         ---------------------------
         |Pos |Symbol  | Followpos |
         ---------------------------
@@ -33,6 +33,8 @@ public class VisitorFollowposTest {
 
         */
 
+    // Factory Test that runs the Visitor through the tree
+    // and checks if the generated table is equal to the expected test result.
     @TestFactory
     public DynamicTest followposFactoryTest() {
 
@@ -52,6 +54,7 @@ public class VisitorFollowposTest {
                 });
     }
 
+    // Generates the tree with each nodes position, nullable, firstpos and lastpos.
     private static TestCase<Visitable, TreeMap<Integer, FollowPosTableEntry>> createTestCase() {
 
         var aOperandNode    = Utils.operandNodeFactory("A", 0, false, 0,0);
@@ -69,6 +72,7 @@ public class VisitorFollowposTest {
 
         var rootNode = Utils.binOpNodeFactory("°", orNode, endNode, false, new Integer[]{0,2,3}, new Integer[]{3});
 
+        // Inserts the followpos into the expected table.
         var tableEntry1 = Utils.tableEntryFactory(0, "A", new Integer[] {0, 1, 3});
         var tableEntry2 = Utils.tableEntryFactory(1, "B", new Integer[] {3});
         var tableEntry3 = Utils.tableEntryFactory(2, "C", new Integer[] {2, 3});

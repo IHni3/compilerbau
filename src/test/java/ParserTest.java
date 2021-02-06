@@ -7,47 +7,50 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
+
 public class ParserTest {
 
+    // Test with single exit Token. Should be valid.
     private static TestCase<String, Visitable> createTestCase01() {
         //#
         var parserExpected01 = new OperandNode("#");
         return new TestCase<String,Visitable>("#",parserExpected01);
     }
+
     private static TestCase<String, Visitable> createTestCase02() {
-        //(A)#
+        //(A)#          Should be valid.
         var parserExpected02 = new BinOpNode("°",
                 new OperandNode("A"),
                 new OperandNode("#"));
         return new TestCase<String,Visitable>("(A)#",parserExpected02);
     }
+
     private static TestCase<String, Visitable> createTestCase03() {
-        //(A*)#
+        //(A*)#         Should be valid.
         var parserExpected03 = new BinOpNode("°",
                 new UnaryOpNode("*", new OperandNode("A")),
                 new OperandNode("#"));
-
-
-
         return new TestCase<String,Visitable>("(A*)#",parserExpected03);
     }
+
     private static TestCase<String, Visitable> createTestCase04() {
-        //(A?)#
+        //(A?)#         Should be valid.
         var parserExpected04 = new BinOpNode("°",
                 new UnaryOpNode("?", new OperandNode("A")),
                 new OperandNode("#"));
         return new TestCase<String,Visitable>("(A?)#",parserExpected04);
-
     }
+
     private static TestCase<String, Visitable> createTestCase05() {
-        //(A+)#
+        //(A+)#         Should be valid.
         var parserExpected05 = new BinOpNode("°",
                 new UnaryOpNode("+", new OperandNode("A")),
                 new OperandNode("#"));
         return new TestCase<String,Visitable>("(A+)#",parserExpected05);
     }
+
     private static TestCase<String, Visitable> createTestCase06() {
-        //(AB)#
+        //(AB)#         Should be valid.
         var parserExpected06 = new BinOpNode("°",
                 new BinOpNode("°",
                         new OperandNode("A"),
@@ -55,8 +58,9 @@ public class ParserTest {
                 new OperandNode("#"));
         return new TestCase<String,Visitable>("(AB)#",parserExpected06);
     }
+
     private static TestCase<String, Visitable> createTestCase07() {
-        //(A*B+)#
+        //(A*B+)#       Should be valid.
         var parserExpected07 = new BinOpNode("°",
                 new BinOpNode("°",
                         new UnaryOpNode("*",
@@ -66,8 +70,9 @@ public class ParserTest {
                 new OperandNode("#"));
         return new TestCase<String,Visitable>("(A*B+)#",parserExpected07);
     }
+
     private static TestCase<String, Visitable> createTestCase08() {
-        //((AB)*)#
+        //((AB)*)#      Should be valid.
         var parserExpected08 = new BinOpNode("°",
                 new UnaryOpNode("*",
                         new BinOpNode("°",
@@ -76,8 +81,9 @@ public class ParserTest {
                 new OperandNode("#"));
         return new TestCase<String,Visitable>("((AB)*)#",parserExpected08);
     }
+
     private static TestCase<String, Visitable> createTestCase09() {
-        //(A|B)#
+        //(A|B)#        Should be valid.
         var parserExpected09 = new BinOpNode("°",
                 new BinOpNode("|",
                         new OperandNode("A"),
@@ -85,8 +91,9 @@ public class ParserTest {
                 new OperandNode("#"));
         return new TestCase<String,Visitable>("(A|B)#",parserExpected09);
     }
+
     private static TestCase<String, Visitable> createTestCase10() {
-        //(123)#
+        //(123)#         Should be valid.
         var parserExpected10 = new BinOpNode("°",
                 new BinOpNode("°",
                         new BinOpNode("°",
@@ -113,6 +120,9 @@ public class ParserTest {
             ));
         }
 
+
+    // Factory Test that runs the Parser through the Expressions
+    // and checks if the output is equal to the expected test result.
     @TestFactory
     public Stream<DynamicTest> parserFactoryTest() {
 
@@ -124,11 +134,12 @@ public class ParserTest {
                             var parser = new Parser(testcase.getInput());
                             var actual = parser.run();
                             var expected = testcase.getExpected();
-
                             Assert.assertTrue(equals(actual,expected));
                         }));
     }
 
+    // Factory Test that runs the Parser through the invalid expressions
+    // and checks if the Parser throws an exception.
     @TestFactory
     public Stream<DynamicTest> parserInvalidInputTest() {
 
@@ -147,9 +158,9 @@ public class ParserTest {
 
                             throw new RuntimeException("Parser did not throw runtime exception!");
                         }));
-
     }
 
+    // Checks if both nodes aren't null and equal.
     private static boolean equals(Visitable v1, Visitable v2)
     {
         if (v1 == v2)
@@ -183,6 +194,4 @@ public class ParserTest {
         }
         throw new IllegalStateException("Invalid node type!");
     }
-
-
 }

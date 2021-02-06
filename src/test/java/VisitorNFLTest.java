@@ -4,6 +4,23 @@ import org.junit.jupiter.api.TestFactory;
 
 public class VisitorNFLTest {
 
+/*
+Used tree for the test:
+
+                °
+               / \
+              /   #
+             |
+            / \
+           °   \
+          / \   *
+         +   ?  |
+         |   |  C
+         A   B
+
+*/
+
+    // Initiates test tree.
     private static Visitable createInput() {
         var aOperandNode = new OperandNode("A");
         var bOperandNode = new OperandNode("B");
@@ -21,14 +38,16 @@ public class VisitorNFLTest {
         return rootNode;
     }
 
+    // Inserts expected results into each node.
     private static Visitable createExpected() {
         var aOperandNode    = Utils.operandNodeFactory("A", 0, false, 0,0);
         var bOperandNode    = Utils.operandNodeFactory("B", 1, false, 1,1);
         var cOperandNode    = Utils.operandNodeFactory("C", 2, false, 2,2);
 
+
         var endNode     = Utils.operandNodeFactory("#", 3, false, 3, 3);
 
-        var plusNode    = Utils.unaryNodeFactory("#", aOperandNode, false, 0, 0);
+        var plusNode    = Utils.unaryNodeFactory("+", aOperandNode, false, 0, 0);
         var questionNode= Utils.unaryNodeFactory("?", bOperandNode, true, 1, 1);
         var starNode    = Utils.unaryNodeFactory("*", cOperandNode, true, 2, 2);
 
@@ -37,13 +56,16 @@ public class VisitorNFLTest {
 
         var rootNode = Utils.binOpNodeFactory("°", orNode, endNode, false, new Integer[]{0,2,3}, new Integer[]{3});
 
+
         return rootNode;
     }
 
     private static TestCase<Visitable, Visitable> createTestCase() {
         return new TestCase<>(createInput(), createExpected());
     }
-    
+
+    // Factory Test that runs the Visitor through the tree
+    // and checks if the output tree is equal to the expected test tree.
     @TestFactory
     public DynamicTest NFLFactoryTest() {
 
@@ -64,6 +86,8 @@ public class VisitorNFLTest {
     }
 
 
+    // Checks if the trees are null and if they,
+    // and nullable, firstpos and lastpos of the nodes are equal.
     private boolean equals(Visitable expected, Visitable visited)
     {
         if (expected == null && visited == null) return true;
@@ -97,7 +121,7 @@ public class VisitorNFLTest {
                     op1.getLastpos().equals(op2.getLastpos());
         }
         throw new IllegalStateException(
-                String.format( "Beide Wurzelknoten sind Instanzen der Klasse %1$s !" + " Dies ist nicht erlaubt!", expected.getClass().getSimpleName())
+                String.format( "Both root nodes are instances of the class %1$s !" + " This is prohibited!", expected.getClass().getSimpleName())
 );
     }
 }
