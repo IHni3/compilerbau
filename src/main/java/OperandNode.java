@@ -1,7 +1,20 @@
 
+// Class for Operand Nodes (Letters and numbers, as well as the exit token #).
 
 public class OperandNode extends SyntaxNode implements Visitable
 {
+
+
+    private Integer position;
+    private final String symbol;
+
+    // Assigns symbol to each node.
+    public OperandNode(String symbol)
+    {
+        position = -1; // isn't initialized yet
+        this.symbol = symbol;
+    }
+
     public Integer getPosition() {
         return position;
     }
@@ -12,18 +25,6 @@ public class OperandNode extends SyntaxNode implements Visitable
 
     public String getSymbol() {
         return symbol;
-    }
-
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
-    }
-
-    private Integer position;
-    private String symbol;
-    public OperandNode(String symbol)
-    {
-        position = -1; // bedeutet: noch nicht initialisiert
-        this.symbol = symbol;
     }
 
     public void accept(Visitor visitor)

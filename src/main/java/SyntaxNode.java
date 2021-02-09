@@ -1,6 +1,9 @@
 import java.util.HashSet;
 import java.util.Set;
 
+// Base class that each node will imply.
+// Let Nodes get and set Nullable, as well as get firstpos and lastpos.
+
 public abstract class SyntaxNode
 {
     private Boolean nullable;
@@ -9,8 +12,8 @@ public abstract class SyntaxNode
 
     public SyntaxNode()
     {
-        firstpos = new HashSet<Integer>();
-        lastpos = new HashSet<Integer>();
+        firstpos = new HashSet<>();
+        lastpos = new HashSet<>();
     }
 
     public Boolean getNullable() {
@@ -28,6 +31,4 @@ public abstract class SyntaxNode
     public Set<Integer> getLastpos() {
         return lastpos;
     }
-
-
 }
