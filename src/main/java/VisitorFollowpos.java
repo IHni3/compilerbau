@@ -2,6 +2,7 @@ import java.util.TreeMap;
 
 // Class for the second Visitor, which checks for the Followpos and enters it in a table
 // alongside position and the symbol of given Node.
+// Done by 2861756
 
 class VisitorFollowpos implements Visitor {
 

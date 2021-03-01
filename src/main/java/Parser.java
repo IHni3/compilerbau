@@ -1,4 +1,5 @@
 // Class for the Parser to divide the input into each char.
+// Done by 6143217
 
 public class Parser
 {
@@ -70,11 +71,11 @@ public class Parser
         {
             throw new RuntimeException("Syntax error !");
         }
-    };
+    }
     private Visitable regExpState() {
             Visitable termNode = termState();
             return regExp1State(termNode);
-    };
+    }
     private Visitable termState() {
         return termState(null);
     }
@@ -98,7 +99,7 @@ public class Parser
         {
             return node;
         }
-    };
+    }
     private Visitable regExp1State(Visitable node) {
         if(getCurrentChar() == '|')
         {
@@ -111,11 +112,11 @@ public class Parser
         else {
             return node;
         }
-    };
+    }
     private Visitable factorState() {
         Visitable node = elemState();
         return h0pState(node);
-    };
+    }
     private Visitable h0pState(Visitable child) {
         if(getCurrentChar() == '*') {
             match('*');
@@ -134,7 +135,7 @@ public class Parser
         else {
             return child;
         }
-    };
+    }
     private Visitable elemState() {
         if(Character.isLetterOrDigit(getCurrentChar()))
         {
@@ -150,7 +151,7 @@ public class Parser
         else {
             throw new RuntimeException("Syntax error !");
         }
-    };
+    }
     private OperandNode alphaNumState() {
         if(Character.isLetterOrDigit(getCurrentChar()))
         {
@@ -162,7 +163,7 @@ public class Parser
         {
             throw new RuntimeException("Syntax error !");
         }
-    };
+    }
 
 
 //------------------------------------------------------------------

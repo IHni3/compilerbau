@@ -1,5 +1,6 @@
 
 // Class for the first Visitor, which checks for Nullable, firstpos and lastpos of given node.
+// Done by 1724537
 
 public class VisitorNFL implements Visitor {
 
